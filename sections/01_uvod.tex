@@ -1,0 +1,237 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\begin{boxnaslovi}
+\section{Uvod}												% { 1 } POGLAVLJE
+\end{boxnaslovi}
+
+\subsection{Jezici i programski jezici}										
+
+Jezik je skup pravila za komunikaciju između subjekata. Pomoću njega se predstavljaju i prenose informacije. Prirodni jezik se koristi za komunikaciju između ljudi u govornoj ili pisanoj formi.\\
+Programski jezik služi, prvenstveno, za komunikaciju između čoveka i računara, ali može da se koristi i za komunikaciju između mašina, kao i za komunikaciju između ljudi. Programski jezici se mogu deliti na razne načine. Jedna podela je:
+\begin{itemize}
+	\item {\it mašinski zavisni}
+	\item {\it mašinski nezavisni}
+\end{itemize}
+Na dalje će uglavnom biti reč o mašinski nezavisnim (višim) programskim jezicima.
+
+\subsection{Definicije programskih jezika}									
+
+\begin{itemize}
+	\item Programski jezik je jezik konstruisan formalno da bi se omogućilo zadavanje instrukcija mašinama, posebno računarima. (Wikipedia)
+	\item Programski jezik je jezik za pisanje programa koje računar zna i može izvršiti.
+	\item Programski jezik je veštački jezik koji služi za opis računarskih programa.
+	\item Programski jezik je veštački jezik za opis konstrukcija (pisanje instrukcija) koje mogu biti prevedene u mašinski jezik i izvršene od strane računara. (American Heritage Dictionary)
+	\item Programski jezik je skup sintaktičkih i semantičkih pravila koja se koriste za opis (definiciju) računarskih programa.
+	\item Programski jezik je notacioni sistem čitljiv za računare i ljude, a služi za opis poslova koje treba da obavi računar.
+\end{itemize}
+Postoji veliki broj programskih jezika (broji se u hiljadama). Enciklopedija Britanika pominje preko 2.000. Drugi izvori pominju preko 2.500 dokumentovanih programskih jezika (Bill Kinnersley). „Encyclopedia of Computer Languages”, autor Diarmuid Pigott, sa Murdoch
+Univerziteta iz Australije navodi preko 8.000 jezika.\\
+Naravno nisu svi programski jezici jednako važni i zastupljeni. Nemoguće je proučiti sve programske jezike.
+
+\subsection{Paradigme i programski jezici}										
+
+Reč paradigma je grčkog porekla i znači: primer za ugled, uzor, uzorak, obrazac, šablon. Obično se koristi da označi vrstu objekata koji imaju zajedničke karakteristike. Programska paradigma predstavlja programski obrazac, programski stil, programski sablon, način programiranja. Predstavlja fundamentalni stil programiranja. Međusobno slični programski jezici se klasifikuju u jednu ili više programskih paradigmi.\\
+Broj programskih paradigmi nije tako velik kao broj programskih jezika. Izučavanjem programskih paradigmi upoznaju se globalna svojstva svih jezika koji pripadaju toj paradigmi. Dakle, informacija da neki jezik pripada nekoj paradigmi govori nam o osnovnim svojstvima i mogućnostima jezika. Poznavanje ogređene paradigme nam značajno olakšava da savladamo svaki programski jezik koji pripada toj paradigmi.\\
+Programske paradigme su usko povezane sa programskim jezicima. Svakoj programskoj paradigmi pripada više programskih jezika. Na primer, proceduralnoj paradigmi pripadaju programski jezici Pascal i C, objektno-orijentisanoj paradigmi pripadaju Simula, JAVA...\\
+Potrebno je izučiti svojstva najistaknutijiih predstavnika pojedinih programskih paradigmi.
+\begin{center}
+{\it Koliko jezika \underline{paradigmi} znaš, toliko vredis.\\
+Koliko \underline{predstavnika} različitih \underline{paradigmi} znaš toliko vredis!}
+\end{center}
+
+Sledeći nivo apstrakcije čine koncepti koji su zajednički za različite paradigme. Jedan programski jezik može podržati više paradigmi, na primer C++ podržava klasičan proceduralni stil, ali i objektno-orijentisani i generički stil programiranja.\\
+Za rešavanje nekog konkretnog problema, posebno je bitan izbor programskog jezika.
+
+\pagebreak
+
+\subsection{Razvoj jezika i paradigmi}
+									
+Bitni momenti u razvoju računara:
+\begin{itemize}
+	\item Jedan od prvih elektronskih računara 1939. ABC za rešavanje sistema linearnih jednačina.
+	\item ENIAC - prvi elektronski računar opšte namene (1946)
+	\item Konceptualna promena krajem 1940. u vidu fon Nojmanove arhitekture.
+	\item Vezuje se za fon Nojmana i računar EDVAC 1951. iako je o nekim elementima ove arhitekture i ranije bilo reči
+\end{itemize}
+
+\subsection{Razvoj jezika}
+
+Kratka istorija:
+\begin{itemize}
+	\item FORTRAN - FORmula TRANslating system, 1957. John Backus i IBM
+	\item LISP - LISt Processing, 1958. John McCarthy
+	\item COBOL - COmmon Business-Oriented language, 1959. Grace Hopper
+	\item 60-te ALGOL (58, 60, 68)
+	\item 70-te C, Pascal, Smalltalk, Prolog
+	\item 80-te C++, Erlang
+	\item 90-te Haskell, Python, Visual Basic, Ruby, JAVA, PHP, OCaml, Lua, JavaScript,...
+	\item C\#, Scala, F\#, Elixir
+\end{itemize}
+Postoji veliki broj programskih jezika, neki su široko rasprostranjeni, neki se više ne koriste. Nastanak i razvoj programskih jezika dosta dobro se može prikazati pomoću {\it razvojnog stabla}. Ono omogućava da se sagleda vreme nastanka pojedinih programskih jezika, kao i međusobni uticaj. Ne postoji jedinstveno razvojno stablo (od autora zavisi na koje će jezike staviti akcenat i kako će ih međusobno povezati).\\
+Neka od pitanja koja se postavljaju su:
+\begin{itemize}
+	\item U kom razdoblju je nastao najveći broj programskih jezika?
+	\item Koji su najutičajniji programski jezici?
+	\item Kada su nastali najuticajnihi programski jezici?
+	\item Zašto postoji veliki broj programskih jezika?
+\end{itemize}
+
+Nove programske paradigme nastajale su uz težnju da se olakša proces programiranja. Istovremeno, nastanak novih paradigmi povezan je sa efikasnim kreiranjem sve kompleksnijeg softvera. Svaka novonastala paradigma, bila je promovisana preko nekog programskog jezika. Razvoj programskih paradigmi kao i programskih jezika skopčan je i sa razvojem hardvera. \\
+Svaka paradigma ima različita shvatanja. Ne postoji jedinstveno mišljenje naučnika o programskim paradigmama (vrstama programskih paradigmi, njihovom značaju, najistaknutijim programskim jezicima pojedinačnih paradigmi itd.). Moguće su različite podele na programske paradigme.
+
+\subsection{Vrste programskih paradigmi}										
+
+\begin{description}
+	\item[Osnovne programske paradigme] \hfill
+		\begin{itemize}
+			\item {\it Proceduralna} paradigma -- osnovni zadatak programera je da opiše način (proceduru) kojim se dolazi do resenja problema.
+			\item {\it Deklarativna} paradigma -- osnovni zadatak programera je da precizno opiše problem, dok se mehanizam programskog jezika bavi pronalaženjem resenja problema.
+		\end{itemize}
+	\item[Vrste programskih paradigmi] \hfill
+	
+		Osnovne programske paradigme:
+		\begin{itemize}
+			 \item Imperativna paradigma
+			 \item Objektno-orijentisana paradigma
+			 \item Funkcionalna paradigma
+			 \item Logička paradigma
+		\end{itemize}
+		 Ostale paradigme se često tretiraju kao podparadigme ili kombinacije osnovnih.
+
+	\item[Napomena o imperativnoj i proceduralnoj paradigmi] \hfill 
+
+		Postoji više shvatanja proceduralne paradigme:
+			\begin{enumerate}
+				\item   \begin{itemize}
+						\item Proceduralna paradigma je podparadigma imperativne paradigme koju karakteriše, pored naredbi, i njihovo grupisanje u podparadigme (funkcije).
+						\item U ovom slučaju, u literaturi se često imperativna i proceduralna paradigma koriste kao sinonimi.
+						\item Imperativna paradigma se karakteriše postojanjem naredbi, dok se deklarativna paradigma karakteriše nepostojanjem naredbi.
+					\end{itemize}
+				\item  	\begin{itemize}
+						\item Proceduralna paradigma je svaka paradigma kod koje se u procesu programiranja opisuje algoritam (procedura) rešavanja problema
+						\item U ovom slučaju je imperativna paradigma podparadigma proceduralne paradigme dok je deklarativna paradigma (pitanje STA) suprotna od proceduralne paradigme (pitanje KAKO).
+					\end{itemize}
+			\end{enumerate}
+
+	\item[Programski jezici i paradigme] \hfill
+
+		Programski jezik je sredstvo koje koristi čovek da izrazi proces pomoću kojeg računar rešava nekakav problem. U zavisnosti od toga na kojoj od ovih reči je akcenat, programskim jezikom je podržana dominantna programska paradigma:
+		\begin{itemize}
+			\item čovek -- logička paradigma
+			\item proces -- funkcionalna paradigma
+			\item računar -- proceduralna paradigma
+			\item problem -- objektno-orijentisana paradigma
+		\end{itemize}
+		Prethodna definicija programskog jezika je prilagođena osnovnm programskim paradigmama. Ova definicija se može dopuniti tako da se preko nje mogu obuhvatiti i druge paradigme. Na primer, modifikacija može biti: \\
+Programski jezik je sredstvo koje koristi čovek da izrazi proces pomoću kojeg računar, koristeći paralelnu obradu rešava nekakav problem. Ako je akcenat na paralelnoj obradi, dolazi se do konkurentne (paralelne) paradigme.
+	\item[Dodatne programske paradigme] \hfill
+		\begin{itemize}
+			\item Komponentna paradigma
+			\item Konkurentna paradigma
+			\item Skript paradigma
+			\item Generička paradigma
+			\item Paradigma programiranja ograničenja
+			\item Paradigma upitnih jezika
+			\item Reaktivna paradigma
+			\item Vizuelna paradigma
+		\end{itemize}
+\end{description}
+
+\subsection{Opisi paradigmi}											
+
+\subsubsection{Imperativna (proceduralna) paradigma}									
+
+Imperativna paradigma nastala je pod uticajem Fon Nojmanove arhitekture računara. Može se reći da se zasniva na tehnološkom konceptu digitalnog računara. Proces izračunavanja se odvija slično kao neke svakodnevne rutine (zasnovan je na algoritamskom naćinu rada), kao što je spremanje hrane koriščenjem recepata, popravljanje kola i slično. Može da se okarakteriše rečenicom ``prvo uradi ovo, zatim uradi ono''. Proceduralnom se saopštava računaru KAKO se problem rešava, tj navodi se prećizan niz koraka (algoritam) potreban za rešavanje problema. \\
+Osnovni pojam imperativnih jezika je naredba. Naredbe se grupišu u procedure i izvršavaju se sekvencijalno ukoliko se eksplicitno u programu ne promeni redosled izvršavanja naredbi. Upravljačke strukture su naredbe grananja, naredbe iteracije i naredbe skoka (\texttt{goto}). Oznake promenljivih su oznake memorijskih lokacija pa se u naredbama često mešaju oznake lokacija i vrednosti -- to izaziva {\bf bočne efekte}. \\
+Primeri jezika: C, Pascal, Basic, Fortran, PL, Algol,\ldots
+
+
+\subsubsection{Objektno-orijentisana paradigma}										
+
+Ovo je jedna od najpopularnijih programskih paradigmi. Sazrela je početkom 80-ih godina prošlog veka, kao težnja da se jednom napisani softver koristi više puta. Spoljasnji svet se simulira (modeluje) pomoću objekata. Objekti intereaguju međusobno razmenom poruka. Ova paradigma bi mogla da se okarakteriše rečenicom: ``Uputi poruku objektima da bi simulirao tok nekog fenomena''. Podaci i procedure (funkcije) se učauravaju (enkapsuliraju) u objekte. Koristi se skrivanje podataka da bi se zastitila unutrašnja svojstva objekata. Objeki su grupisani po klasama (klasa predstavlja sablon, koncept, na osnovu kojeg se kreiraju konkretni objekti, tj. instance). Klase su najčešće hijerarhijski organizovane i povezane mehanizmom nasleđivanja.\\
+Primeri jezika: Simula 67, SmallTalk, C++, Eiffel, Java, C\#
+
+\subsubsection{Funkcionalna paradigma}											
+
+Rezultat težnje da se drugačije organizuje proces programiranja. Izračunavanja su evaluacije matematičkih funkcija. Zasnovana je na pojmu matematičke funckije i ima formalnu strogo definisanu matematičku osnovu u {\bf lambda računu}. Mogla bi da se okarakteriše rečenicom: ``Izračunati vrednost izraza i koristiti je''\\
+Eliminisani su bočni efekti što utiče na lakse razumevanje i predviđanje ponašanja programa -- izlazna vrednost funkcije zavisi samo od ulaznih vrednosti argumenata funkcije. Najistaknutiji predstavnik ove paradigme je Lisp. Paradigma je nastala 50-ih i početkom 60-ih godina prošlog veka, stagnirala je u razvoju tokom 70-ih i oživela nastankom programskog jezika Haskell.\\
+Primeri jezika: Lisp, Scheme, Haskell, ML, Scala, OCaml
+
+\subsubsection{Logička paradigma}												
+
+Nastaje kao težnja da se u kreiranju programa koristi isti način razmišljanja kao i pri rešavanju problema u svakodnevnom životu. Paradigma je deklarativna. Opisuju se odnosi između činjenica i pravila u domenu problema, koriste se aksiome, pravila izvođenja i upiti. Logička paradigma se dosta razlikuje od svih ostalih po načinu pristupa rešavanju problema. Nije jednako pogodna za sve oblasti istraživanja, osnovni domen je rešavanje problema veštačke inteligencije. Izvrsavanje programa zasniva se na sistematskom pretrazivanju skupa činjenica uz korišćenje određenih pravila zaključivanja. Zasnovana je na matematičkoj logici, tj na predikatskom računu 1. reda. Zasnovana je na automatskom dokazivanju teorema (metod rezolucije). Mogla bi da se okarakteriše rečenicom: ``Odgovori na pitanje kroz trazenje resenja''.\\
+Primeri jezika: Prolog (najpoznatiji), ASP, Datalog, CLP, ILOG, Solver, ParLog, LIFE
+
+\subsubsection{Komponentna paradigma}											
+
+Ideja je da se softver sklapa od većih gotovih komponenti, kao što se to radi kod sklapanja elektronskih i tehničkih uređaja. Softverska komponenta je kolekcija delova (metoda i objekata) koji obezbeđuju neku funkcionalnost. Kao i tehničke komponente, i softverske komponente mogu biti proste ili kompleksne, mogu delovati samostalno ili u konjunkciji sa drugim jedinicama. \\
+Komponentna paradigma je nova ili je podparadigma objektno-orijentisane paradigme? Nezavisno od toga, pitanje je: da li treba posebno izučavati komponentno programiranje? Stil programiranja koji je u ekspanziji i treba mu pokloniti posebnu pažnju.\\
+Ideja je da se uprosti proces programiranja i da se jednom kreirane komponente mnogo puta koriste. Komponenta je jedinica funkcionalnosti sa ``ugovorenim'' interfejsom. Interfejs definiše način na koji se komunicira sa komponentom, i on je u potpunosti odvojen od implementacije. Komponente se međusobno povezuju da bi se kreirao kompleksan softver. Način povezivanja komponenti treba da bude jednostavan, po mogućnosti prevlačenjem i spuštanjem na zeljenu lokaciju. Kreiranje programa se vrsi biranjem komponenti i postavljanjem na pravo mesto, a ne pisanjem ``linije za linijom''. U okviru komponentnog programiranja, važno je razvojno okruženje koje se koristi, dok sama implementacija komponenti i kod koji se komponentnim programiranjem generise može da bude u različitim programskim jezicima, npr JAVA, C++, C\#, \ldots
+
+\subsubsection{Konkurentna paradigma}										
+
+Konkurentnu paradigmu karakteriše više procesa koji se izvršavaju u istom vremenskom periodu, a koji imaju isti cilj. Postoje različite forme konkurentnosti:
+\begin{description}
+	\item[Konkurentnost u užem smislu] -- \underline {\it jedan procesor, jedna memorija} \hfill
+
+		Karakterise je preklapajuće izvršavanje više procesa koji koriste isti procesor i koji komuniciraju preko zajedničke memorije. Ovi procesi modeliraju procese spoljašnjeg sveta koji mogu da se dese konkurentno, na primer kod operativnih sistema.
+
+	\item[Paralelno programiranje] -- \underline {\it više procesora, jedna memorija} \hfill
+
+		Ukoliko postoji više procesora sa pristupom jedinstvenoj memoriji, onda je u pitanju paralelno programiranje. Procesi međusobno komuniciraju preko zajedničke memorije. Cilj paralelnog izračunavanja je ubrzanje toka izračunavanja.
+	\item[Distribuirano programiranje] -- \underline {\it više procesora, više memorija} \hfill
+
+		Ukoliko postoji više procesora od kojih svaki ima svoju memoriju, onda je u pitanju distribuirano programiranje. Procesi međusobno šalju poruke da bi razmenili informacije. Distribuirano izračunavanje čine grupe umreženih računara koje imaju isti čilj kao posao koji izvršavaju. Može se shvatiti kao vrsta paralelnog izračunavanja ali sa drugačijom međusobnom komunikacijom koja nameće nove izazove.
+\end{description}
+Pisanje konkurentnih programa je značajno teže od pisanja sekvencijalnih programa. Nameće nove probleme, po pitanju sinhronizacije procesa i pristupa zajedničkim podacima. Za osnovne koncepte konkurentnog programiranja potrebno je obezbediti odgovarajuću podršku u programskom jeziku. \\
+Primeri jezika: Ada, Modula, ML, Java \ldots
+
+\subsubsection{Paradigma programiranja ograničenja}								
+
+U okviru ove paradigme zadaju se relacije između promenljivih u formi nekakvih ograničenja. Ograničenja mogu biti raznih vrsta (logička, linearna,\ldots). Ova ograničenja ne zadaju sekvencu koraka koji treba da se izvrše već osobine resenja koje treba da se pronađe. Paradigma je deklarativna. Jezici za programiranje ograničenja čestu su nadogradnja jezika logičke paradigme, na primer PROLOG-a.\\
+Postoje biblioteke za podršku ovoj vrsti programiranja u okviru imperativnih jezika, npr za jezike C, JAVA, C++, Python.\\
+Primeri jezika: BProlog, OZ, Claire, Curry
+
+\subsubsection{Skript paradigma}												
+
+Skript jezik je programski jezik koji služi za pisanje skriptova. To je spisak (lista) komandi koje mogu biti izvršene u zadatom okruženju bez interakcije sa korisnikom. U prvobitnom obliku pojavljuju se kao komandni jezici operativnih sistema (npr Bash). Skript jezici imaju veliku primenu na Internetu. Skript jezici mogu imati specifican domen primene, ali mogu biti i jezici opšte namene (npr Python).\\
+Skript jezici se ne kompajliraju, već interpretiraju. Cesto se koriste za povezivanje komponenti unutar neke aplikacije. Omogućavaju kratak kod. Najčesće nisu strogo tipizirani. Kod i podaci češto mogu zameniti uloge. Nije uvek lako napraviti razliku između skript jezika i drugih programskih jezika. \\
+Skript paradigma je često specifična kombinacija drugih paradigmi, kao što su: objektno-orijentisana, proceduralna, funkcionalna (pa je to razlog što se skript paradigma ne prepoznaje uvek kao posebna paradigma). Skript jezici su u ekspanziji.\\
+Primeri jezika: Unix Shell (sh), JavaScript, PHP, Perl, Python, XSLT, VBScript, Lua, Ruby, \ldots
+
+\subsubsection{Paradigma upitnih jezika}											
+
+Upitni jezici mogu biti vezani za baze podataka ili za pronalaženje inormacija (information retrieval). Paradigma je deklarativna.
+\begin{description}
+	\item[Upitni jezici baza podataka] \hfill
+
+	Oni na osnovu struktuiranih činjenica zadatih u okviru struktuiranih baza podataka daju konkretne odgovore koji zadovoljavaju nekakve trazene uslove. Najpoznatiji predstavnih upitnih jezika za relacione baze podataka je SQL. XQuery je jezik za pretrazivanje XML struktuiranih podataka.\\
+Digresija: Jezici za obelezavanje teksta i programske paradigme:
+	\begin{itemize}
+		\item Poslednjih decenija veliki procvat doživljavaju jezici za obelezavanje teksta, kao što su: SGML, HTML, XML.
+		\item Jezici za obelezavanje teksta nisu programski jezici pa samim tim i ne mogu da generišu neku programsku paradigmu.
+		\item Međutim, paralelno sa razvojem jezika za obelezavanje (posebno XML), razvijeni su specijalizovani programski jezici za razne obrade koje se odnose na jezike za obelezavanje.
+		\item U takve jezike spadaju: XSLT, XQuery, XLS, \ldots Ovi jezici se mogu pridružiti raznim paradigmama.
+	\end{itemize}
+
+	\item[Upitni jezici za pronalaženje informacija] \hfill
+
+	To su upitni jezici koji pronalaze dokumenta koji sadrže informacije relevantne za oblast istraživanja. CQL je jezik za iskazivanje upita za pronalaženje infomacija.
+\end{description}
+
+\subsubsection{Reaktivna paradigma}											
+
+Reaktivno programiranje je usmereno na tok podataka u smislu prenošenja izmena prilikom promene podataka. Na primer, u proceduralnom programskom jeziku, \texttt{a = b + c} je komanda koja se izvršava dodelom vrednosti promenljivoj \texttt{a} na osnovu trenutnih vrednosti promenljivih \texttt{b} i \texttt{c} i kasnija promena vrednosti \texttt{b} ili \texttt{c} ne utiče na promenu vrednosti promenljive \texttt{a}.Kod reaktivnog programiranja, \texttt{a = b + c} ima značenje da svaka promena vrednosti \texttt{b} i \texttt{c} utiče na izmenu vrednosti promenljive \texttt{a}.\\
+Koristi se za programiranje u okviru tabela, npr VisiCalc, Excel, LibreOffice Calc. Jezici za opis hardvera pripadaju ovoj paradigmi, jer se izmena jednog kola u dizajnu propagira na celo kolo -- Verilog, VHDL, \ldots 
+
+\subsubsection{Vizuelna paradigma}												
+
+Vrsi modelovanje spoljašnjeg sveta (usko povezana sa objektno-orijentisanom paradigmom). Koriste se grafički elementi (dijagrami) za opis akcija, svojstva i povezanosti sa raznim resursima. Vizuelni jezici su dominantni u fazi dizajniranja programa. Postoje razne vrste dijagrama: dijagram klasa, dijagram korišćenja, dijagram stanja, dijagram aktivnosi, dijagram interakcija, \ldots\\
+Postoje softverski alati za prevođenje ``vizuelnog opisa'' u neki programski jezik (samim tim i mašinski jezik). Pogodnija za pravljenje ``skica'' programa, a ne za detaljan opis. Glavni predstavnik ove paradigme je UML.
+
+
+
+
+\end{document}

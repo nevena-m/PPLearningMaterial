@@ -1,0 +1,1018 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\begin{boxnaslovi}
+\section{Funkcionalna paradigma}											% { 7 } POGLAVLJE
+\end{boxnaslovi}
+
+\subsection{Uvod}														% { 7 } [ 1 ]
+
+Imperativnu paradigmu karakteriše postojanje naredbi -- izvršavanje programa se svodi na izvršavanje naredbi. Izvršavanje programa se može svesti i na evaluaciju izraza. U zavisnosti od izraza, imamo {\it logičku paradigmu} (izrazi su relacije) i {\it funkcionalnu} (izrazi su funkcije). Ako je izraz relacija -- rezultat je true/false. Ako je izraz funkcija, rezultat mogu da budu različite vrednosti.
+\\
+Funkcije smo sretali i ranije, u drugim programskim jezicima, ali iako nose isto ime, ovde se radi o sustinski različitim stvarima. Pomenute paradigme se temelje na različitim teorijskim modelima, odnosno modelima izračunljivosti ({\it computational models})
+\begin{itemize}
+\item Formalizam za imperativne jezike -- Turingova i URM mašina
+\item Formalizam za logičke jezike -- Logika prvog reda
+\item Formalizam za funkcionalne jezike -- Lambda račun
+\end{itemize}
+Funkcionalni jezici su mnogo bliži svom teorijskom modelu nego imperativni jezici, pa je poznavanje \underline{lambda izraza} važno i ono omogućava fukncionalno programiranje.\\
+Za ekspresivnost vazi:
+\begin{center}
+funkcionalni jezici $\Leftrightarrow$ lambda račun $\Leftrightarrow$ Tjuringova mašina $\Leftrightarrow$ imperativni jezici
+\end{center}
+{\bf Svi programi koji se mogu napisati imperativnim stilom, mogu se napisati i funkcionalnim stilom.}
+Lambda račun naglašava pravila za transformaciju izraza i ne zamara se arhitekturom mašine koja to može da ostvari.
+\\
+Funkcionalna paradigma (ili funkcijska) zasniva se na pojmu matematičkih funkcija -- otud potiče i njen naziv. Osnovni cilj ove paradigme je da oponaša matematičke funkcije -- rezultat toga je pristup programiranju koji je u osnovi drugačiji od imperativnog programiranja. Osnovna apstrakcija u imperativnim programskim jezicima je apstrakcija kontrole toka (podrutina), u objektno-orijentisanim jezicima je objekat, a u funkcionalnim jezicima to je funkcija.
+Funkcionalno programiranje je stil koji se zasniva na izračunavanju izraza kombinovanjem fajlova. Osnovne aktivnosti su:
+\begin{enumerate}
+\item {\it Definisanje funkcije} (pridruživanje imenu funkcije vrednosti izraza pri čemu izraz može sadržati pozive drugih funkcija)
+\item {\it Primena funkcije} (poziv funkcije sa zadatim argumentima)
+\item {\it Kompozicija funkcija} (navođenje niza poziva funkcija) -- kreiranje programa
+\end{enumerate}
+Program u funkcionalnom programiranju je niz definicija i poziva funkcija. Izvršavanje programa je \underline{evaluacija funkcija}.
+
+\begin{boxprimer}	
+Na primer, pretpostavimo da imamo funkciju $$ max(x,y) = \left\{\begin{array}{c} x , x>y \\ y , y\ge x \end{array} \right.$$
+Prethodnu funkciju možemo koristiti za definisanje novih funkcija. Na primer: $$ max3(x,y,z)=max(max(x,y),z)$$ gde je $max3$ kompozicija funkcija $max$. Prethodno definisane funkcije možemo kombinovati na razne načine. Na primer, ako treba izračunati $max6(a,b,c,d,e,f)$, to možemo uraditi na sledeće načine:
+\begin{align*}
+&= max(max3(a,b,c), max3(d,e,f))\\
+&= max3(max(a,b), max(c,d), max(e,f))\\
+&= max(max(max(a,b, max(c,d)), max(e,f))
+\end{align*}
+
+\end{boxprimer}
+
+Da bi se uspešno programiralo, treba:
+\begin{itemize}
+\item ugraditi neke osnovne funkcije u sam programski jezik,
+\item obezbediti mehanizme za formatiranje novih (kompleksnijih funkcija)
+\item obezbediti strukture za prezentovanje podataka (strukture koje se koriste da se predstave parametri i vrednosti koje funkcija izračunava)
+\item formirati biblioteku funkcija koje mogu biti korišćene kasnije
+\end{itemize}
+Ukoliko je jezik dobro definisan, broj osnovnih funkcija je relativno mali. Iako su na početku funkcionalni jezici obično bili interpreterski, funkcionalni jezici se sada i kompajliraju. 
+\\
+{\it Osnovna apstrakcija} je funkcija i sve se svodi na izračunavanje funkcija. Funkcija je ravnopravna sa ostalim tipovima podataka, može biti povratna vrednost ili parametar druge funkcije. Primer \underline{funkcije višeg reda}:
+\begin{Verbatim}
+duplo f x = f (f x)
+\end{Verbatim}
+Postojanje funkcija višeg reda je važna karakteristika funkcionalnih jezika. Posebno važna funkcije višeg reda su \texttt{map}, \texttt{fold} (\texttt{reduce}) i \texttt{filter}.
+\\ \\
+\indent Funkcionalna paradigma nastaje početkom 60-ih godina prošlog veka -- najistaknutiji predstavnik paradigme bio je programski jezik Lisp({\it LISt Programming -- LISP}). Stagnacija u razvoju funkcionalne paradigme javila se 70-ih godina prošlog veka. Tjuringova nagrada za 1977. godinu je dodeljena John Backus-u za njegov rad na razvoju Fortran-a. Svaki dobitnik ove nagrade drži predavanje prilikom formalne dodele, koje se posle štampa u časopisu {\it Communications of the ACM}. Backus je održao predavanje sa poentom da su čisti funkcionalni programski jezici bolji od imperativnih jer su programi koji se pišu na njima čitljiviji, pouzdaniji i verovatnije ispravni. Suština njegove argumentacije bila je da su funkcionalni jezici lakši za razumevanje, i za vreme i nakon razvoja programa, najviše zbog toga što je vrednost izraza nezavisna od konteksta u kojem se izraz nalazi.
+\\
+Osnovna karakteristika {\bf čistih} funkcionalnih jezika je {\it referentna prozirnost} (transparentnost) što kao posledicu ima nepostojanje propratnih (bočnih) efekata. U okviru svog predavanja, Backus je koristio svoj funkcionalni jezik FP kao podršku argumentaciji koju izlaze. Iako jezik FP nije zaživeo, njegovo izlaganje je motivisalo debate i nova istraživanja funkcionalnih programskih jezika.
+\\  \\
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{>{\hsize=.1\hsize}XX||>{\hsize=.1\hsize}XX}
+1924. & Kombinatorna logika -- Schonfinkel and Curry	& 1986. & Erlang (Ericsson) -- 1998 open source \\
+1930. & Lambda račun -- Alonzo Church			& 1990. & SML -- Robin Milner, University of Edinburgh \\
+1959. & Lisp -- McCarthy, MIT 					& 1990. &Haskell -- Haskell Committee (ML, Miranda), 
+	   Haskell 98, Haskell 2010 \\
+	   1964. & SECD -- apstraktna mašina i jezik ISWIM (Landin) -- prekretnica za razvoj kompajlera i praktičnih rešenja
+	   & 1996.& OCaml -- Xavier Leroy, Jerome Vouillon, Damien Doligez, 
+	   Didier Remy (ML) \\
+	   1977. & FP -- Backus						& 2002.& F\# -- Don Syme, Microsoft Research, Cambridge (ML) \\
+	   1978. & Scheme -- Sussman and Steel				& 2003.& Scala -- Martin Odersky, EPFL \\
+	   1978. & ML -- Robin Milner, University of Edinburgh		& 2012.& Elixir -- Jose Valim \\
+	   1985. & Miranda -- David Turner (ML)				& &
+	   \end{tabularx}
+}
+	   \\
+	   
+\captionof{figure}{Razvoj Lisp-a}
+
+\begin{footnotesize}
+
+\begin{tikzpicture}[ -latex,
+every node/.style={shape= rectangle, draw, minimum width = 10mm} ]
+	   
+\node (lisp1) {Lisp 1};
+\node[below = of lisp1, yshift = 0.5cm] (lisp15) {Lisp 1.5};
+	   
+\node[below  = of lisp15 , yshift = 0.5cm, xshift=-40mm] (nil) {NIL};
+\node[below  = of lisp15, yshift = 0.5cm, xshift=-25mm ] (maclisp) {MacLisp};
+\node[below  = of lisp15, yshift = 0.5cm, xshift=-10mm] (zetalisp) {ZetaLisp};
+\node[below  = of lisp15, yshift = 0.5cm, xshift=10mm] (bblisp) {BbnLisp};
+\node[below = of lisp15, yshift = 0.5cm, xshift=25mm] (stanflisp) {\makecell{Stanford\\Lisp}};
+\node[below = of lisp15, yshift = 0.5cm, xshift=40mm] (franzlisp) {\makecell{Franz\\Lisp}};
+	   
+\node[below = of nil, yshift = 0.5cm] (tlisp){T Lisp};
+\node[below = of nil, yshift = -0.5cm] (scheme) {Scheme};
+	   
+	   
+\node[below = of bblisp, yshift = 5mm] (interlisp) {InterLisp};
+\node[below = of stanflisp, xshift = -15mm, yshift = 5mm] (ucil) {UciLisp};
+\node[below = of stanflisp, yshift = 5mm] (psl) {PSL};
+\node[below = of stanflisp, yshift = 5mm, xshift = 15mm] (standlisp) {\makecell{Standard\\Lisp}};
+
+\node[below = of zetalisp, yshift = -10mm] (comlisp) {Common Lisp};
+\node[below = of comlisp, yshift = 5mm] (goldlisp) {\makecell{Golden\\Common Lisp}};
+\node[below = of psl, yshift = -5mm] (kitlisp) {LispKit Lisp};
+\node[below = of psl, yshift = -10mm] (flisp) {FLisp};
+
+\draw (lisp1.south) -- (lisp15.north) ;
+\draw (lisp15.south) |- ++(0,-0.25) -| (nil.north) ;
+\draw (lisp15.south) |- ++(0,-0.25) -| (maclisp.north);
+\draw (lisp15.south) |- ++(0,-0.25) -| (zetalisp.north);
+\draw (lisp15.south) |- ++(0,-0.25) -| (bblisp.north);
+\draw (lisp15.south) |- ++(0,-0.25) -| (stanflisp.north);
+\draw (lisp15.south) |- ++(0,-0.25) -| (franzlisp.north);
+
+\draw (nil.south) -- (tlisp.north) ;
+\draw (tlisp.south) -- (scheme.north) ;
+\draw (bblisp.south) -- (interlisp.north) ;
+\draw (comlisp.south) -- (goldlisp.north) ;
+
+\draw (maclisp.south) --([xshift=-5mm]comlisp.north);
+\draw (zetalisp.south) -- (comlisp.north) ;
+\draw (interlisp.south) |- ++(0,-0.15)  -| ([xshift=2mm]comlisp.north) ;
+\draw (ucil.west) |- +(-1,0)  -| ([xshift=4mm]comlisp.north) ;
+\draw (psl.south) |- ++(0,-0.5) --  ([yshift=1mm]comlisp.east) ;
+\draw ([yshift=-5mm]standlisp.west) -- ([yshift=-1mm]comlisp.east) ;
+
+\draw (stanflisp.south) -- (ucil.north) ;
+\draw (stanflisp.south) -- (psl.north) ;
+\draw (stanflisp.south) -- (standlisp.north) ;
+
+\end{tikzpicture}
+\end{footnotesize}
+\\
+	   Podrška funkcionalnim konceptima: 2011 C++, JAVA, skript jezici(Python).\\
+	   Razvojem i zrelošću jezika kao što su ML, Haskell, OCaml, F\# i Scala raste interesovanje i upotreba funkcionalnih jezika. Ovi jezici se sada koriste npr u domenima obrade baza podataka, finansijskog modelovanja, statičke analize i bioinformatike, a broj domena upotrebe raste. Funkcionalni jezici su pogodni za paralelizaciju, što ih posebno čini popularnim za paralelno i distribuirano programiranje.
+	   
+ \subsection{Svojstva funkcionalnih jezika}										% { 7 } [ 2 ]
+	   \subsubsection{Funkcije - {\it first class citizen}}									% { 7 } [ 2 . 1 ] 
+	   U okviru programskog jezika za neki gradivni element se kaže da je {\it građanin prvog reda} ako u okviru jezika ne postoje restrikcije po pitanju njegovog kreiranja i korišćenja. Građani prvog reda se mogu čuvati u promenljivama, prosleđivati funkcijama, kreirati u okviru funkcija i vratiti kao povratna vrednost funkcija. U dinamički tipiziranim jezicima (tj gde se tipovi određuju u fazi izvršavanja programa), građani prvog reda imaju tip koji se proverava u fazi izvršavanja. U funkcionalnom programiranju {\bf funkcije su građani prvog reda}.
+\\ \\
+	   \indent Primena funkcije je izračunavanje vrednosti za neke konkretne argumente. Određena je uparivanjem imena funkcije sa određenim elementom iz domena. Rezultat se izračunava evaluiranjem izraza koji definiše preslikavanje funkcije.
+	   \\
+	   {\bf Funkcije višeg reda} (funkcijske forme) imaju jednu ili više funkcija kao parametre ili imaju funkciju kao rezultat, ili oba. 
+	   
+	   \begin{description}
+	   \item[$\alpha$ funkcija (\texttt{apply to all} ili \texttt{map})] \hfill
+	   
+	   Ova funkcija ima jedan parametar koji je funkcija, i kada se primeni na listu parametara, kao rezultat se dobija lista vrednosti koja se izračunava primenom funkcije parametra na listu parametra. Na primer:
+	   \begin{align*}
+	   f(x)&=2*x\\
+	   \alpha(f, (1,2,3))&=(2,4,6)
+	   \end{align*}
+	   \item[$\phi$ funkcija (\texttt{filter})] \hfill
+	   
+	   Ova funkcija ima jedan parametar koji je funkcija (povratna vrednost true/false), i kada se primeni na listu parametara, kao rezultat se dobija lista vrednosti za koje je ispunjen uslov funkcije. Na primer:
+	   \begin{align*}
+	   f(x)&=odd(x)\\
+	   \phi(f, (1,2,3))&=(1,3)
+	   \end{align*}
+	   
+	   \item[$\rho$ funkcija (\texttt{reduce})] \hfill
+	   
+	   Ova funkcija ima jedan parametar koji je funkcija, i kada se primeni na listu parametara, kao rezultat se dobija odgovarajuća vrednost. Na primer:
+	   \begin{align*}
+	   f(x,y)&=x+y\\
+	   \rho(f, (1,2,3))&=6
+	   \end{align*}
+	   \end{description}
+	   
+	   Matematička funkcija je preslikavanje elemenata jednog skupa (domena) u elemente drugog skupa (kodomena). Definicija funkcije uključuje zadavanje domena, kodomena i preslikavanja. Preslikavanje može da bude zadato izrazom ili tabelom. Funkcije se primenjuju na pojedinačne elemente iz domena, koji se zadaju kao parametri (argumenti) funkcija. Domen može da bude Dekartov proizvod različitih skupova, tj funkcija može da ima više od jednog parametra. 
+	   \\
+	   Definicija funkcije obično uključuje ime funkcije za kojom sledi lista parametara u zagradama, a zatim i izraz koji zadaje preslikavanje. Na primer: $kub(x)\equiv x*x*x$ za svaki realan broj x. U okviru ove definicije, domen i kodomen su skupovi realnih brojeva, dok se znak $\equiv$ koristi sa značenjem ``se definise kao''. Parametar $x$ može da bude bilo koji član domena, ali se fiksira kada god se evaluira u okviru izraza funkcije.
+	   Kod striktnih jezika, za vreme evaluacije, preslikavanje funkcije ne sadrži nevezane parametre. Svako pojavljivanje parametra se vezuje sa nekom vrednošću i konstantno je za vreme evaluacije. Na primer, za $kub(x)$ imamo $kub(2.0)=2.0*2.0*2.0=8$. Parametar $x$ je vezan sa vrednošću 2.0 tokom evaluacije i ne postoje nevezani parametri. Dalje, $x$ je konstanta i njena vrednost se ne može promeniti za vreme evaluacije.
+	   \begin{boxprimer}
+	   {\bf Primeri definisanja matematičkih funkcija:}
+	   \\
+	   \begin{tabularx}{\textwidth}{XXX|>{\hsize=1.1\hsize}X}
+	   \multicolumn{3}{c|}{\textbf{Funkcija abs}} & \textbf{Funkcija faktorijel} \\
+	   \hline
+	   \multicolumn{2}{r|}{Domen:} & svi realni brojevi & prirodni brojevi \\ 
+	   \multicolumn{2}{r|}{Kodomen:} & pozitivni realni brojev & prirodni brojevi \\
+	   \multicolumn{2}{r|}{Preslikavanje:} &
+	   \parbox{4cm}{$abs(x) \equiv \left\{\begin{array}{cc} x&,x\ge 0 \\-x&,x<0 \end{array}\right.$}
+	   & 
+	   \parbox{6cm}{$n! \equiv \left\{\begin{array}{cc} n*(n-1)!&, n> 0 \\1&, n=0 \end{array}\right.$}
+	   
+	   \end{tabularx}
+	   \end{boxprimer}
+	   Jedna od osnovnih karakteristika matematičkih funkcija je da se izračunavanje preslikavanja kontroliše {\bf rekurzijom} i {\bf kondicionalnim izrazima}, a ne sa sekvencom i iteracijom (kao što je to kod imperativnih jezika).
+	   \\
+	   Matematičke funkcije: {\bf vrednosti preslikavanja elemenata iz domena su uvek isti elementi iz kodomena} (jer ne postoje propratni (bočni) efekti i funkcije ne zavise od drugih spoljašnjih promenljivih).
+	   \\
+	   Kod imperativnih jezika vrednost funkcije može da zavisi od tekućih vrednosti različitih globlanih ili nelokalnih promenljivih.
+	   
+	   %DVE KOLONE
+	   \begin{multicols}{2}
+	   
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   int x = 0;
+   int f() { return x++; }
+   ...
+   cout << f() << " " << f() << endl;
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   \columnbreak
+	   Za razumevanje prethodnog koda potrebno je poznavanje tekućeg {\bf stanja programa}.
+	   
+	   \end{multicols}
+	   
+	   \subsubsection{Stanje programa i referentna prozirnost}				% { 7 } [ 2 . 2 ] 
+	   
+	   Stanje programa je osnovna karakteristika imperativnih jezika. Njega čine sve vrednosti u memoriji kojima program u toku izvršavanja ima pristup. Imperativni jezici imaju implicitno stanje i izvršavanje programa se svodi na postepeno menjanje tog stanja izvođenjem pojedinačnih naredbi. Ovo stanje se predstavlja programskim promenljivama.
+	   
+	 %DVE KOLONE
+	  \begin{multicols}{2}
+	  \begin{boxprimer}
+	   \begin{Verbatim}
+   int x = 0, a = 0;		
+   x = x +3;			
+   a++;			     
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   \columnbreak
+	   \begin{boxprimer}	
+	   \begin{Verbatim}
+   int x = 0;
+   ...
+   int f() { return x++; }
+   ...
+   cout << f() << " " << f() << endl;
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   \end{multicols}
+	   
+	   Promena stanja se najčešće izvršava naredbom dodele (eksplicitna, npr "=" , ili skrivena, npr "++"). Naziva se implicitno stanje jer znate da se dodelom menja memorija, ne razmišljate o samom stanju, ono se na neki način podrazumeva. Potrebno je razumeti korišćenje promenljivih i njihove promene tokom izvršavanja da bi se razumeo program, što je veoma zahtevno za velike programe.
+	   
+	   %DVE KOLONE
+	   \begin{multicols}{2}
+	   
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   /* Globalna promenljiva y */
+   int y;
+	   
+   /* Definicija funkcije foo: */
+   int foo( int x ){	
+	   y=0;
+	   return 2*x;
+   }
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   /* Upotreba funkcije foo: */
+   ...
+   y=5;
+   x=foo(2);
+   z=x+y;
+   ...
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   
+	   \columnbreak
+	   
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   /* Upotreba funkcije foo: */
+   ...
+   y=foo(2);
+   if(y==foo(2)) ...
+	   ...
+		   \end{Verbatim}
+		   \end{boxprimer}
+		   
+		   
+		   \begin{boxprimer}
+		   \begin{Verbatim}
+   /* Upotreba funkcije foo: */}
+   ...
+   y=5;
+   z=foo(2)+y;
+   ...
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   
+	   \end{multicols}
+	   Funkcionalni jezici nemaju implicitno stanje, čime je razumevanje efekta rada funkcije značajno olakšano. Izvođenje programa se svodi na evaluaciju izraza i to bez stanja. Posebno, nepostojanje naredbe dodele i promenljivih u imperativnom smislu (tj nepostojanje promeljivih koje menjaju stanje) ima za posledicu da {\bf iterativne konstrukcije nisu moguće} pa se ponavljanje ostvaruje kroz rekurziju.
+	   
+	   %DVE KOLONE
+	   \begin{multicols}{2}
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   int fact(int x){
+	   int n = x;
+	   int a = 1;
+	   while(n>0){
+		   a = a*n;
+		   n = n-1;
+	   }
+	   return a;
+   }
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   
+	   \columnbreak
+	   
+	   \begin{boxprimer}
+	   $n!=\left\{ \begin{array}{cc} n*(n-1)! &, n>0\\ 1 &, n=0 \end{array}\right.$
+	   \end{boxprimer}
+	   
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   fact n = if n==0 then 1 else n*fact(n-1)
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   \end{multicols}
+	   
+	   Rekurzija je u imperativnim jezicima manje prirodna. U funkcionalnim jezicima je prirodna i zapravo je i jedino rešenje.
+	   \\
+	   Neki problemi se ne mogu rešiti bez stanja (ili se mogu rešiti komplikovano). Nepostojanje implicitnog stanja nije nedostatak već se upotreba stanja može ostvariti na drugi način, korišćenjem eksplicitnog stanja. Ono se može ``napraviti'' po potrebi i koristiti. Na primer:
+	   \begin{boxprimer}
+	   \begin{Verbatim}
+   fact x = fact' x 1
+   where fact' n a = if n>0 then fact' (n-1) (a*n) else a
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   
+	   {\it\bf Referentna prozirnost (transparentnost, providnost)}\\
+	   Vrednost izraza je svuda jedinstveno određena: ako se na dva mesta referencira na isti izraz, onda je vrednost ta dva izraza ista. Na primer, u sledećem kodu, svako pojavljivanje izraza x u programu možemo zameniti sa \texttt{fact 5}.
+	   \begin{boxprimer}[width=\linewidth/2]
+	   \begin{Verbatim}
+   ... x + x ...
+   where x = fact 5
+	   \end{Verbatim}
+	   \end{boxprimer}
+	   Svojstvo referentne prozirnosti govori da je {\bf redosled naredbi nebitan}. U funkcionalnom programiranju neobavezan je eksplicitni redosled navođenja funkcija -- funkcije možemo kombinovati na razne načine, bitno je da se definise izraz koji predstavlja rešenje problema. To naravno nije slučaj kod imperativnih jeika gde je biran redosled izvođenja operacija, \texttt{x} se nakon inicijalizacije može promeniti, pa stoga imperativni jezici nisu referentno prozirni. (Naredba dodele ima propratni efekat, a ona je u osnovi imperativnog programiranja.) Propratni efekat je svaka ona promena implicitnog stanja koja narušava prozirnost programa. Propratni efekti nemaju smisla sa stanovišta matematičkih izračunavanja. Referentna prozirnost ima niz pogodnosti i korisna je u drugim paradigmama. 
+	   \\
+	   Programi sa referentnom prozirnošću su {\bf formalno koncizni}, prikladni za {\bf formalnu verifikaciju, manje podložni greškama} i lakše ih je transformisati, optimizovati i {\bf paralelizovati}. Paralelizacija je moguća zbog referentne prozirnosti jer se mogu delovi izraza sračunati nezavisno, a onda združiti naknadno. Međutim, referentna prozirnost ima cenu.
+	   \\
+	   Ukoliko želimo da imamo u potpunosti referentnu prozirnost, ne smemo dopustiti nikakve propratne efekte. U praksi je to veoma teško jer postoje neki algoritmi koji se suštinski temelje na promeni stanja (npr. random) dok neke funkcije postoje samo zbog svojih propratnih efekata (npr. scanf, tj I/O funkcije). Zbog toga, većina funkcionalnih programskih jezika {\bf dopušta kontrolisane propratne efekte} (tj imperativnost je prisutna u većoj ili manjoj meri i na različite načine). U zavisnosti od prisutnosti imperativnih osobina, postoji podela na čiste funkcionalne jezike (bez propratnih efekata) i na one koji nisu čisti.
+	   \\
+	   Čisto funkcionalni jezici ne dopuštaju bas nikakve propratne efekte, takvi jezici koriste dodatne mehanizme kako bi omogućili izračunavanje sa stanjem, a istovremeno zadržali referentnu prozirnost. Jako je mali broj čistih funkcionalnih jezika (Haskell, Clean, Miranda). Većina funkcionalnih jezika uključuju naredne imperativne osobine: promenljive (mutable variables) i konstrukte koji se ponašaju kao naredbe dodele.
+	   \begin{itemize}
+	   \item Funkcionalni jezici su jezici koji podržavaju i ohrabruju funkionalni stil programiranja, npr SML, cisti jezici Haskell, Clean, Miranda
+	   \item Moderni višeparadigmatski programski jezici su Common Lisp, OCaml, Scala, Python, Ruby, F\#, Clojure...
+	   \item Neki imperativni jezici eksplicitno podržavaju neke funkcijske koncepte (C\#, Java), dok su u drugima oni ostvarivi (C, C++).
+	   
+	   \end{itemize}
+	   Iako mnogi imperativni jezici podržavaju osnovne koncepte funkcionalnog programiranja, često je funkcionalni podskup takvih jezika vrlo slab i nećemo ih nazivati funkcionalnim jezicima.
+
+	   \subsubsection{Strukture podataka i tipovi podataka}					% { 7 } [ 2 . 3 ]
+	   
+	   Funkcionlani jezici imaju osnovne tipove podataka (celobrojne vrednosti, realne vrednosti, logičke vrednosti, stringovi). Osnovna struktura podataka koja se javlja u svim funkcionalnim jezicima je {\it lista}. Funkcionalni jezici podržavaju i {\it torke} koje mogu da sadrže elemente različitih tipova. 
+	   \\
+	   Često: torke zauzimaju kontinualni prostor u memoriji (slično kao nizovi), dok su liste implementirane preko povezanih listi -- izbor odgovarajuće strukture zavisi od problema (da li se često obilazi ili se često radi dodavanje i brisanje).
+	   \\
+	   {\it Zaključivanje tipova} može biti statičko (u fazi kompilacije) i dinamičko (u fazi izvrsavanja). Statičko zaključivanje tipova je manje fleksibilno ali efikasnije, dok je dinamičko fleksibilnije ali manje efikasno. Funkcionalni jezici mogu imati statičko (npr Haskell) ili dinamičko zaključivanje tipova (npr Elixir). Funkcionalni programski jezici su najčešće jako tipizirani jezici -- svi tipovi moraju da se poklapaju i nema implicitnih konverzija. S druge strane, nije neophodno navoditi sve tipove -- kompajler je u stanju da često automatski sam zaključi tipove. Kod koji se piše najčešće je sam po sebi polimorfan, a zaključuju se najopštiji mogući tipovi na osnovu tipskih razreda.{\it Tipski razredi} -- tip sa jednakošću, tipovi sa uređenjem, numerički tipovi, celobrojni tipovi, realni tipovi, \ldots
+	   
+	   
+	   \subsubsection{Sintaksa i semantika}								% { 7 } [ 2 .4 ]
+	   
+	   Prvi funkcionalni jezik, LISP, koristi sintaksu koja je veoma drugačija od sintakse koja se koristi u imperativnim jezicima. Najnoviji funkcionalni jezici koriste sintaksu koja je slična sintaksi imperativnih jezika. 
+	   \\
+	   {\it Pattern matching} 
+	   \\
+	   {\it Comprehensions}
+	   \\
+	   Semantika programskog jezika opisuje proces izvršavanja programa na tom jeziku. Ona može da se opiše formalno i neformalno. Uloga semantike:
+	   \begin{itemize}
+	   \item programer može da razume kako se program izvršava pre njegovog pokretanja kao i šta mora da obezbedi prilikom kreiranja kompilatora
+	   \item razumevanje karakteristika programskog jezika
+	   \item dokazivanje svojstava određenog programskog jezika
+	   \end{itemize}
+	   Mogu se razmatrati različita semantička svojstva jezika. Postoje {\it striktna} i {\it nestriktna} semantika (izračunavanje vođeno potrebama).
+	   
+	   \indent Izraz je {\bf striktan} ako nema vrednost kad bar jedan od njegovih operanada nema vrednost. Semantika je striktna ako je svaki izraz tog jezika striktan. Kod striktne semantike, prvo se izračunaju vrednosti svih operanada, pa se onda izračunava vrednost izraza. Tehnika prenosa parametara koja podržava ovu semantiku je {\it prenos parametara po vrednosti}.\\
+	   Većina funkcionalnih jezika ima striktnu semantiku, npr Lisp, OCaml, Scala.
+	   \\
+	   
+	   \indent Izraz je {\bf nestriktan} kad ima vrednost čak i ako neki od njegovih operanada nema vrednost. Semantika je nestriktna ukoliko se dozvoli da izraz ima vrednost i ako neki argument izraza nema vrednost (tj ukoliko se dozvole nestriktni izrazi). Kod nestriktne semantike izračunavanje operanada, tj argumenata se odlaže sve dok te vrednosti ne budu neophodne. Ta strategina je poznata kao {\it zadržano lenjo izračunavanje} ({\it lazy evaluation}), a prenos parametara je {\it po potrebi} ({\it call by need}).
+	   Nestriktna semantika omogućava kreiranje beskonačnih struktura i izraza.\\
+	   Miranda i Haskell imaju nestriktnu semantiku.
+	   \\
+	   Od konkretnog izraza zavisi da li će i na osnovu koliko poznatih argumenata biti izračunata njegova vrednost. Na primer: \texttt{a \& b} ima vrednost \texttt{False} ako \texttt{a} ima vrednost \texttt{False}, tj. nije važna vrednost izraza \texttt{b} (nestriktna semantika). U striktnoj semantici, ako vrednost za \texttt{b} nije poznata, vrednost konjunkcije se ne može izračunati.
+	   
+	   \subsubsection{Prednosti i mane funkcionalnog programiranja}
+	   
+	   Postoji opšta debata na temu prednosti i mana funkcionalnog programiranja. Naredni razlozi se često navode kao prednosti funkcionalnog programiranja, \textcolor{red}{ali istovremeno i kao mane}:
+	   \begin{itemize}
+	   
+	   \item {\bf Stanje i propratni efekti} -- za velike programe teško je pratiti stanje i razumeti propratne efekte, lakše je kada imamo uvek isto ponašanje funkcija, \textcolor{red}{ali svet koji nas okružuje je pun promena i različitih stanja i nije prirodno da koncepti jezika budu u suprotnosti sa domenom koji se modeluje}.
+	   \item {\bf Paralelno programiranje} -- jednostavno i bezbedno konkurentno programiranje je posledica referentne prozirnosti, međutim, \textcolor{red}{rad sa podacima koji se ne menjaju dovodi do mogućeg rada sa bajatim podacima, dok rad sa podacima koji se menjaju jeste komplikovaniji i zahteva kodiranje kompleksne logike, ali omogućava rad sa svežim podacima (sto je bitnije?)}.
+	   \item {\bf Stil programiranja} -- programi su često kraći i lakši za čitanje, \textcolor{red}{treba znati pročitati funkcionalni kod}.
+	   \item {\bf Produktivnost programera} -- produktivnost je veća, \textcolor{red}{ali produktivnost mora da bude mnogo veća da bi se opravdao trošak zapošljavanja programera koji znaju funkcionalno programiranje; takođe, većina programera ne gradi nove sisteme već rade na održavanju starih sistema koji su pisani u drugim (imperativnim) jezicima}.
+	   \item Za funkcionalne programe lakše je konstruisati matematički dokaz ispravnosti.
+	   \item Stil programiranja nameće razbijanje koda u manje delove koji imaju jaku koheziju i izraženu modularnost.
+	   \item Pisanje manjih funkcija omogućava veću čitljivost koda (?) i lakšu proveru grešaka.
+	   \item Testiranje i debagovanje je jednostavnije:
+	   \begin{itemize}
+	   \item Testiranje je jednostavnije jer je svaka funkcija potencijalni kandidat za unit testove. Funkcije ne zavise od stanja sistema što olakšava sintezu test primera i proveru da li je izlaz odgovarajući.
+	   \item Debagovanje je jednostavnije jer su funkcije uglavnom male i jasno specijalizovane. Kada program ne radi, svaka funkcija je interfejs koji se može proveriti tako da se brzo izoluje koja funkcija je odgovorna za grešku.
+	   \end{itemize}
+	   \item Mogu se jednostavnije graditi biblioteke funkcija.
+	   
+	   \item \textcolor{red}{Efikasnost se dugo navodila kao mana}, ali zapravo efikasnost odavno nije problematična
+	   \item \textcolor{red}{Debagovanje ipak može da bude komplikovano}(kada je nestriktna semantika u pitanju)
+	   \item \textcolor{red}{Nije pogodno za svaku vrstu problema} (mada se i ovde sve brže brišu granice)
+	   \item \textcolor{red}{Često se navodi da je funkcionalno programiranje teško za učenje} (diskutabilno!)
+	   \item U radu {\it ``Why no one uses functional languages?''}, Philip Wadler 1998. godine diskutuje razne mane funkcionalnog programiranja, ali je većina ovih mana u međuvremenu uklonjena, iako se i dalje (neosnovano) često pominju. Tu se pominju: kompatibilnost sa drugim jezicima (u složenim sistemima se kombinuju različite komponente), biblioteke, portabilnost, dostupnost i podrška, nedostatak profajlera i dibagera, period učenja, popularnost. On već tada navodi da efikasnost nije ključni razlog.
+	   \item Ono što je svakako izvesno je da se velike pare ulazu u razvoj i podršku funkcionalnog stila programiranja (npr Scala).
+	   \item Postoje domeni u kojima treba koristiti funkcionalno programiranje i domeni za koje funkcionalno programiranje nije elegantno rešenje
+	   \item Postoji velika cena prelaska na funkcionalno programiranje i za to treba vremena.
+	   \item Pomeranje prema programiranju koje je više u funkcionalnom stilu mora da ide polako i postepeno.
+	   
+	   \end{itemize}
+	   
+	   \subsection{Lambda račun}							% { 7 } [ 3 ]
+	   
+	   \subsubsection{Istorijski pregled}						% { 7 } [ 3 . 1  ]
+	   
+	   \begin{description}
+	   
+	   \item[Formalni model definisanja algoritma] \hfill
+	   
+	   Lambda račun ($\lambda${\it -calculus}) je formalni model izračunljivosti funkcija. Alonzo Church 1930. godina. Lambda račun se zasniva na apstrakciji i primeni funkcija korišćenjem vezivanja i supstitucije (zamene). Funkcije se tretiraju kao izrazi koji se postepeno transformišu do rešenja, tj. funkcija definiše algoritam. Lambda račun je fomalni model definisanja algoritama.
+	   
+	   \item[Prvi funkcionalni jezik] \hfill
+	   
+	   Iako to nije bila primarna ideja, tj. $\lambda$-račun je razvijen kao jedan formalizam za izračunavanje bez ideje da to treba da se koristi za programiranje, danas se $\lambda$-račun smatra prvim funkcionalnim jezikom. Ekspresivnost $\lambda$-računa je ekvivalentna ekspresivnosti Tjuringovih masina (1937.). $\lambda$-račun naglasava pravila za transformaciju izraza i ne zamara se arhitekturom mašine koja to može da ostvari. Svi moderni funkcionalni jezici su zapravo samo sintaksno ulepšane varijate $\lambda$-računa. Ekspresivnost Haskell-a je ekvivalentna ekspresivnosti $\lambda$-računa.
+	   
+	   \item[$\lambda$-račun sa i bez tipova] \hfill
+	   
+	   Postoji više vrsta $\lambda$-računa, tj $\lambda$-račun sa i bez tipova. Istorijski, prvi je nastao netipizirani $\lambda$-račun, tj domen funkcije nije ugrađen u $\lambda$-račun. Tipizirani $\lambda$-račun (1940.) je vrsta $\lambda$-računa koja daje jedno ograničenje primene $\lambda$-računa, tj. funkcije mogu da se primenjuju samo na odgovarajući tip podataka. Tipizirani $\lambda$-račun igra vaznu ulogu u dizajnu sistema tipova programskih jezika. Osim u programskim jezicima, $\lambda$-račun je važan i u teoriji dokaza, filozofiji, lingvistici.
+	   
+	   \end{description}
+	   
+	   \subsubsection{Sintaksa} 								% { 7 } [ 3 . 2 ]
+	   
+	   Zadatak definisanja funkcije može se razdvojiti od zadatka imenovanja funkcije. Na primer:
+	   
+	   \begin{boxprimer}
+	   Funkcija $sum(x,y)=x+y$ moze da se definiše i bez njenog imenovanja kao funkcija koje promenljive x i y preslikava u njihov zbir, tj $(x,y)\rightarrow x+y$ .\\
+	   Funkcija $id(x)=x$ moze da se definiše kao $x \rightarrow x$
+	   \end{boxprimer}
+	   
+	   $\lambda$-račun daje osnove za definisanje bezimenih funkcija. $\lambda$-izraz definiše parametre i preslikavanje funkcije, ne i ime funkcije, pa se takođe zove {\it anonimna funkcija} (jos sinonima: bezimena funkcija, funkcijska apstrakcija). 
+	   
+	   % RAZMISLI O TOME DA LI OVO TREBA LEPSE DA SE SMESTI :)
+
+% DVE KOLONE
+\begin{multicols}{2}
+Sintaksa $\lambda$-izraza: 
+$\lambda promenljiva.telo$ \\
+sa značenjem $promenljiva \rightarrow telo$
+
+\columnbreak
+
+\begin{boxprimer}
+$\lambda x.x + 1$    \hspace{0.5cm}, $x \rightarrow x + 1$ \\
+$\lambda x.x $  \hspace{1cm} , $x\rightarrow x$ \\
+$\lambda x.x * x + 3$ , $x \rightarrow x \cdot x + 3$
+\end{boxprimer}
+\end{multicols}
+
+\begin{multicols}{2}
+
+$\lambda$-izraz se moze primenjivati na druge izraze.\\
+Sintaksa: $(\lambda promenljiva.telo)izraz $\\
+- intuitivno, primena odgovara pozivu funkcije.
+
+\columnbreak
+\begin{boxprimer}
+$(\lambda x.x + 1)5$ \\
+$(\lambda x.x*x+3)((\lambda x.x + 1)5)$
+\end{boxprimer}
+
+\end{multicols}
+
+Validni (ispravni) $\lambda$-izrazi nazivaju se {\it\bf lambda termovi}. Oni se sastoje od promenljivih, simbola apstraksije $\lambda$, tačke i zagrada. Induktivna definicija za građenje lambda termova:
+\begin{description}
+\item[Promenljive] Promenljiva x je validni $\lambda$ term
+\item[$\lambda$-apstrakcija] Ako je $t$ $\lambda$ term, a $x$ promenljiva, onda je $\lambda x.t$ $\lambda$ term
+\item[$\lambda$-primena] Ako su $t$ i $s$ $\lambda$ termovi, onda je $ts$ $\lambda$ term
+\end{description}
+$\lambda$ termovi se mogu konstruisati samo konačnom primenom prethodnih pravila.
+\\
+Prirodni brojevi se mogu definisati korišćenjem ove definicije $\lambda$-računa. Ukoliko $\lambda$-račun ne uključuje konstante u definiciji, onda se naziva {\it\bf čist}. Radi jednostavnosti, numerali se često podrazumevaju i koriste već u okviru same definicije $\lambda$ termova:
+\begin{boxprimer}
+<con> ::= konstanta <id> ::= identifikator <exp>\\
+\hspace*{4.2cm} ::= <id> | $\lambda$ <id>.<exp> | <exp><exp> | (<exp>) | <con>
+\end{boxprimer}
+
+Ukoliko $\lambda$-račun ukljucuje konstante u difiniciji, onda se naziva {\it\bf primenjen}. Isto tako, korišćenjem osnovnog $\lambda$-računa mogu se definisati i aritmetičke funkcije. Radi jednostavnosti, u okviru $\lambda$ termova koristimo aritmetičke funkcije imenovane na standardni nacin, kao sto su $+,-,*$ i slično.
+\\
+U okviru lambda izraza zagrade su važne. Na primer, termovi $\lambda x.((\lambda x.x+1)x)$ i $(\lambda x.(\lambda x.x+1))x$ su različiti termovi. Da bi se smanjila upotreba zagrada, postoje pravila asocijativnosti za {\it primenu} i {\it apstrakciju}. {\bf Primena} funkcije je {\bf levo} asocijativna, tj umesto $(e_1 e_2)e_3$ možemo kraće da pišemo $e_1e_2e_3$. {\bf Apstrakcija} je {\bf desno} asocijativna, tj umesto $\lambda x.(e_1 e_2)$ pišemo skraćeno $\lambda x.e_1 e_2$. I sekvenca apstrakcija može da se skrati, npr $\lambda x.\lambda y.\lambda z.e$ se skraćeno zapisuje kao $\lambda xyz.e$.
+\\
+\begin{boxprimer}[width=.6\linewidth]
+\begin{center}
+$\lambda xy.x(\lambda z.zy)yy\lambda z.xy(xz)$\\
+$\lambda x.(\lambda y.(((((x(\lambda z.zy)))y)y)\lambda z.((xy)(xz))))$ %prekopirano sa profesorkinog pdf-a
+\end{center}
+\end{boxprimer}
+
+\subsubsection{Slobodne i vezane promenljive}				% { 7 } [ 3 . 3 ]
+
+U okviru $\lambda$-računa ne postoji koncept deklaracije promenljive. Promenljiva može biti vezana i slobodna (tj nije vezana). Na primer, u termu $\lambda x.x+y$ promenljiva $x$ je vezana a promenljiva $y$ je slobodna promenljiva. Slobodne promenljive u termu su one promenljive koje nisu vezane $\lambda$ apstrakcijom. Induktivna definicija:
+\begin{description}
+\item[Promenljive] Slobodna promenljiva terma $x$ je samo $x$
+\item[Apstrakcija] Skup slobodnih promenljivih terma $\lambda x.t$ je skup slobodnih promenljivih terma $t$ bez promenljive $x$
+\item[Primena] Skup slobodnih promenljivih terma $ts$ je unija skupova slobodnih promenljivih terma $t$ i terma $s$
+\end{description}
+Na primer, term $\lambda x.x$ nema slobodnih promenljivih, dok term $\lambda x.x*y$ ima slobodnu promenljivu $y$.
+\\
+\underline{\bf $\alpha$ ekvivalentnost} -- definise se za $\lambda$ termove, sa ciljem da se uhvati intuicija da izbor imena vezane promenljive u $\lambda$ računu nije vazan.
+\begin{boxprimer}
+Termovi $\lambda x.x$ i $\lambda y.y$ su $\alpha$-ekvivalentni jer oba predstavljaju istu funkciju, tj. identitet.\\
+Termovi $\lambda x.x$ i $\lambda x.y$ nisu $\alpha$-ekvivalentni jer prvi predstavlja funkciju identiteta, a drugi konstantnu funkciju.\\
+S druge strane, termovi $x$ i $y$ nisu $\alpha$-ekvivalentni jer nisu vezani u okviru $\lambda$ apstrakcije.
+\\
+Zaokružiti slovo ispred $\alpha$-ekvivalentnih termova:
+\begin{enumerate}[label=(\alph*)]
+\item $x$ i $y$
+\item $\lambda z.z*y-1$ i $\lambda x.x*z-1$
+\item $\lambda a.a*y-1$ i $\lambda b.b*z-1$
+\item $\lambda ij.i-j*3$ i $\lambda mn.m-n*3$
+\item $\lambda k.5 + k/2$ i $\lambda h.5 + h/2$
+\end{enumerate}
+\end{boxprimer}
+
+\subsection{Redukcije}								% { 7 } [ 4 ]
+
+Uveli smo sintaksu, sada treba da opišemo transformacije koje možemo da izvršimo. Za transformacije se koriste izvođenja (redukcije, konverzije). Postoje razne vrste redukcija. Redukcije se nazivaju slovima grčkog alfabeta. One daju uputstva kako transformisati izraze iz početnog stanja u neko finalno stanje.
+
+\begin{description}
+\item[$\delta$ redukcija] \hfill
+
+Najprostiji tip $\lambda$ izraza su konstante -- one se ne mogu dalje transformisati. $\delta$ redukcija se oznacava sa $\rightarrow_{\delta}$ i odnosi se na transformaciju funkcija koje kao argumente sadrže konstante. Na primer, $3 + 5 \rightarrow_{\delta} 8$. Ukoliko je jasno o kojoj je redukciji reč, onda se piše samo $\rightarrow$.
+
+\item[$\alpha$ redukcija ili preimenovanje] \hfill
+
+Dozvoljava da se promene imena vezanim promenljivama. Na primer, $\alpha$ redukcija izraza $\lambda x.x$ moze da bude u $\lambda y.y$. Termovi koji se razlikuju samo po $\alpha$  konverziji su $\alpha$ {\it ekvivalentni}. Na primer, $\lambda xy.x = \lambda zy.z = \lambda ay.a ...$ ($y$ nije vezana promenljiva i za nju ne možemo da vršimo preimenovanje. $\alpha$ preimenovanje je nekada neophodno da bi se izvrsila $\beta$ redukcija. 
+\\
+$\alpha$ redukcija nije u potpunosti trivijalna, treba voditi računa. Na primer, $\lambda x.\lambda x.x$ može da se svede na $\lambda y.\lambda x.x$ ali ne i na $\lambda y.\lambda x.y$. Ukoliko naredne funkcije primenimo na broj 3
+\begin{itemize}
+\item[] $\lambda x.\lambda x.x - $ dobijemo preslikavanje kojim se  3 se preslikava u funkciju identiteta 
+\item[] $\lambda y.\lambda x.x - $ dobijemo preslikavanje kojim se 3 se preslikava u funkciju identiteta 
+\item[] $\lambda y.\lambda x.y - $ dobijemo preslikavanje kojim se 3 se preslikava u fukciju konstantnog preslikavanja u broj 3
+\end{itemize}
+Takođe, $\alpha$ redukcijom ne sme da se promeni ime promenljive tako da bude uhvaćeno drugom apstrakcijom. Na primer, $\lambda x.\lambda y.x$ smemo da zamenimo sa $\lambda z.\lambda y.z$ ali ne smemo da zamenimo sa $\lambda y.\lambda y.y$.
+
+\item[$\beta$ redukcija -- primena funkcije] \hfill
+
+Kada funkciju primenimo na neki izraz, želeli bismo da možemo da izračunamo vrednost funkcije. U okviru $\lambda-$računa, to se sprovodi $\beta$ redukcijom: 
+$$ (\lambda promenljiva.telo)izraz \rightarrow_{\beta} [izraz/promenljiva]telo $$
+$\beta$ redukcija u telu $\lambda$ izraza formalni argument zamenjuje aktuelnim argumentom i vraća telo funkcije (dakle svako pojavljivanje promenljive u telu se zamenjuje datim izrazom). Na primer:
+$$(\lambda x.x + 1)5 \rightarrow_{\beta} [5/x](x+1) = 5 + 1 \rightarrow_{\delta} 6$$
+$$(\lambda x.x * x + 3)((\lambda x.x + 1)5) \rightarrow [6/x](x * x + 3) = 6 * 6 + 3 \rightarrow_{\delta} 39$$
+Visestruka primena $\beta$ funkcije (oznaka $\twoheadrightarrow_\beta$), na primer:
+$$(\lambda x.x * x +3)((\lambda x.x + 1)5) \twoheadrightarrow_\beta 39$$
+Primenjujemo $\beta$ redukciju sve dok možemo -- to odgovara izračunavanju vrednosti funkcije.
+
+\end{description}
+
+Prethodni primeri su bili jednostavni jer je primena obuhvatala konstante i jednostavne $\lambda$ izraze. Da bi se izmene vršile na ispravan način, potrebno je precizno definisati pojam zamene -- \underline{supstitucije}. Ukoliko postoji problem kolizije imena, potrebno je uraditi $\alpha$ preimenovanje kako bi se izbegla kolizija. Na primer, $\lambda x.((\lambda y.\lambda x.x + y)x)5$. Supstitucija se definiše rekurzivno po strukturi terma.\\
+Supstitucija $[I/P]T$ je proces zamene svih slobodnih pojavljivanja promenljive $P$ u telu $\lambda$ izraza $T$ izrazom $I$ na sledeći način ($x$ i $y$ su promenljive, a $M$ i $N \lambda$ izrazi):
+\begin{description}
+\item[Promenljive] $[N/x]x = N {N/x}y = y$ pri cemu je $x\ne y$
+\item[Primena] $[N/x](M_1 M_2) = ([N/x])(M_1)([N/x])(M_2)$ 
+\item[Apstrakcija] $[N/x](\lambda x.M) = \lambda x.M [N/x](\lambda y.M) = \lambda y.([N/x]M)$ ukoliko je $x\ne y$ i $y$ ne pripada skupu promenljivih za $N$
+\end{description}
+
+$\beta$ redukcija se definiše preko naredne supstitucije:
+$$ (\lambda promenljiva.telo)izraz \rightarrow_{\beta} [izraz/promenljiva]telo $$
+
+Eta ($\eta$) redukcija se može shvatiti kao funkcijsko proširenje. Ideja je da se uhvati intuicija po kojoj su dve funkcije jednake ukoliko imaju identično spoljašnje ponašanje, odnosno ako se za sve vrednosti evaluiraju u iste rezultate. Izrazi $\lambda x. f x$ i $f$ označavaju istu funkciju ukoliko se $x$ ne javlja kao slobodna promenljiva u $f$. To je zato sto ako se funkcija $\lambda x. f x$ primeni na neki izraz $e$, onda je to isto što i $f e$, i to važi za svaki izraz $e$. To zapisujemo i ovako:
+$$ \lambda x. f x \rightarrow_\eta f$$
+sa značenjem da se izraz $\lambda x. f x$ redukuje u izraz $f$.
+
+\subsection{Funkcije všeg reda i funkcije sa više argumenata}		% { 7 } [ 5 ]
+
+{\it Funkcije višeg reda} su funkcije koje kao argument ili kao povratnu vrednost imaju funkciju. Funkcija koja očekuje funkciju tu funkciju će primeniti negde u okviru svog tela. Na primer:
+$\lambda x.(x 2) +1 -$ $\lambda$ izraz kod kojeg $x$ primenimo na dvojku (dakle x je nekakva funkcija), a onda na to dodamo broj 1
+$$ (\lambda x.(x 2) + 1)(\lambda x.x + 1) \rightarrow_\beta (\lambda x.x + 1)2 + 1 \twoheadrightarrow_\beta 4(\lambda x.(x 2) +1)(\lambda x.x) \twoheadrightarrow_\beta 3$$
+
+Funkcija koja vraća funkciju će u svom telu sadržati drugi lambda izraz. Na primer:
+$$ \lambda x.(\lambda y.2 * y + x) (\lambda x.(\lambda y.2 * y + x))5 \rightarrow_\beta \lambda y.2 * y + 5 $$
+Dakle, kada se početni lambda izraz primeni na 5, onda 5 ulazi u izraz na mesto x, i dobijamo novu funkciju kao rezultat. Kako je ovakva upotreba česta, uvedena je sintaksna skraćenica koju smo ranije pominjali, tj $\lambda x.(\lambda y.2 * y + x)$ pišemo kao $\lambda xy.2 * y + x$. Dakle umesto zagrada, nižemo argumente. 
+\\
+Lambda izrazi ograničeni su samo na jedan argument. Kako definisati funkcije sa više argumenata, npr $f(x,y) = x + y$? Bilo koja funkcija sa više argumenata može se definisati pomoću funkcije sa samo jednim argumentom (rezultat iz 1924. godine). Postupak se naziva {\it Curryjev postupak} (po američkom matematičaru Haskell Brooks Curry). Ideja je da funkcija koja treba da uzme dva argumenta, prvo uzme jedan argument, od njega napravi funkciju koja će onda da uzme drugi argument.
+\\
+Funkcija oblika $f(x_1,x_2,...,x_n) = telo$ u lambda računu se definiše kao $\lambda x_1.(\lambda x_2.(...(\lambda x_n.telo)))$ odnosno skraćeno kao \\ %%%%%%	DODATO ------------------------------------------------------------------------------------------------
+$\lambda x_1x_2...x_n.telo$. Na primer, $f(x,y) = x + y$ se definise kao $\lambda xy.x + y$
+$$ ((\lambda xy.x + y)2)6 \rightarrow_\beta \lambda y.(2 + y)6 \rightarrow_\beta 2+6 \rightarrow_\delta 8$$
+\begin{boxprimer}
+Izvesti normalni oblik primenom odgovarajućih redukcija na termove (prikazati postupak):
+\begin{enumerate}
+\item $(\lambda k.k * k + 1)((\lambda m.m + 1)2)$
+\item $(\lambda k.k 4)(\lambda y.y - 2)$
+\item $((\lambda kmn.k * m + n)2)3$
+\end{enumerate}
+\end{boxprimer}
+
+\subsection{Normalni oblik}		% { 7 } [ 6 ]
+
+Višestrukom $\beta$ redukcijom izračunavamo vrednost izraza i zaustavljamo se tek onda kada dalja $\beta$ redukcija nije moguća. Tako dobijen $\lambda$ izraz naziva se normalni oblik i on intuitivno odgovara vrednosti polaznog izraza. Bilo bi dobro da je normalni oblik jedinstven i da ga mi mozemo uvek pronaći. Ali nemaju svi izrazi svoj normalni oblik, na primer, $(\lambda x.x x)(\lambda x.x x)$. Za neke izraze mogu da postoje različite mogućnosti primene $\beta$ redukcije, primer :
+$$(\lambda x.5 * x)((\lambda x.x + 1)2) \rightarrow_\beta (\lambda x.5 * x)(2+1)$$
+$$(\lambda x.5 * x)((\lambda x.x + 1)2) \rightarrow_\beta 5 * ((\lambda x.x + 1)2)$$
+Postavlja se pitanje da li je važno kojim se putem krene?
+
+\begin{theorem}[Church--Rosser (svojstvo konfluentnosti)]
+Ako se $\lambda$ izraz može svesti na dva različita izraza $M$ i $N$, onda postoji treći izraz $Z$ do kojeg se može doći iz $M$ i iz $N$.
+\end{theorem}
+Posledica teoreme je da svaki $\lambda$ izraz ima najvise jedan normalni oblik (dakle, ako postoji, on je jedinstven). To znači da nije bitno kojim putem se dolazi do normalnog oblika, ukoliko do normalnog oblika dođemo, znamo da smo došli do jedinstvenog normalnog oblika. Kako da dođemo do normalnog oblika?
+\begin{description}
+\item[Aplikativni poredak] \hfill
+
+$\beta$ redukcijom uvek redukovati najdublji najlevlji izraz. Na primer: 
+$$(\lambda x.5 * x)(2+1) \rightarrow_\beta (\lambda x.5 * x)3 \rightarrow_\beta 5 * 3 \rightarrow 15$$
+Ovo odgovara pozivu po vrednosti (call-by-value) -- izračunavamo vrednost argumenta i tek kada ga izračunamo šaljemo ga u funkciju i funkcija dočeka u svom telu izračunati argument.
+
+\item[Normalni poredak] \hfill
+
+$\beta$ redukcijom uvek redukovati najlevlji izraz. Na primer:
+$$ (\lambda x.5 * x)(2+1) \rightarrow_\beta 5 * (2 + 1) \rightarrow 5*3 \rightarrow 15 $$
+Ovo odgovara evaluaciji po imenu (call-by-name) ili evaluaciji po potrebi (call-by-need).  
+
+\begin{theorem}[Teorema standardizacije]
+Ako je $Z$ normalni oblik izraza $E$, onda postoji niz redukcija u normalnom poretku koji vode od $E$ do $Z$.	
+\end{theorem}
+
+\item[Lenja evaluacija] \hfill
+
+Normalnim poretkom redukcija ostvaruje se lenja evaluacija -- izrazi se evaluiraju samo ukoliko su potrebni. Lenjom evaluacijom se izbegavaju nepotrebna izracunavanja. Na primer:
+\begin{itemize}
+\item[] Aplikativni poredak: $(\lambda x.1)(12345 * 54321) \rightarrow_\beta (\lambda x.1)670592745 \rightarrow_\beta 1$
+\item[] Normalni poredak: $(\lambda x.1)(12345 * 54321) \rightarrow_\beta 1$
+\end{itemize}
+Dakle, evaluiramo izraz tek onda kad nam njegova vrednost treba. Lenja evaluacija nam garantuje završetak izračunavanja uvek kada je to moguće. Na primer:
+\begin{itemize}
+\item[] Aplikativni poredak: $(\lambda x.1)((\lambda x.x x)(\lambda x.x x) \rightarrow_\beta $\ldots (ne završava)
+\item[] Normalni poredak: $(\lambda x.1)((\lambda x.x x)(\lambda x.x x)) \rightarrow_\beta 1$
+\end{itemize}
+Postoje tehnike koje primenjuju kompajleri, a koje obezbeđuju da se izračunavanja ne ponavljaju, ovo je važno sa stanovišta efikasnosti izračunavanja.
+\begin{boxprimer}
+Za $(\lambda x.x+x)(12345*54321) \rightarrow_\beta (12345*54321)+(12345*54321)$ ne bi bilo dobro dva puta nezavisno računati proizvod $(12345*54321)$ već je potrebno to samo jednom uraditi, i za to postoje {\it tehnike redukcije grafova}.
+\end{boxprimer}
+
+\end{description}
+
+\begin{boxnaslovi}
+\section{Haskell}								% { 8 }
+\end{boxnaslovi}
+\indent {\bf Razvoj} \hfill %% IZMENA ------------------------------------------------------------------------------
+
+Haskell Brooks Curry(1900-1982) logičar i matematičar. \\
+\begin{tabular}{r|l}
+1987 & međunarodni odbor počinje sa dizajnom novog, zajedničkog funkcionalnog jezika \\
+1990 & odbor najavljuje specifikaciju Haskell 1.0\\
+1990-1997& 4 izmene standarda\\
+1998 & Haskell 98\\
+2010 & Haskell Prime, tj Haskell 2010
+\end{tabular}
+
+\indent {\bf Karakteristike Haskella \href{http://www.haskell.org/}{(Zvanicni sajt)}} \hfill
+
+Haskell je {\it čist funkcionalni jezik}. Zasniva se na lenjoj evaluaciji -- izbegavaju se nepotrebna izračunavanja. Ima moćni sistem tipova -- automatsko zaključivanje tipova. Strogo je tipiziran jezik (svi tipovi moraju da se poklapaju, {\it nema implicitnih konverzija}. Ima podršku za paralelno i konkurentno programiranje.
+\\
+Podržava {\it parametarski polimorfizam} (višeobličje) i {\it preopterećivanje} -- što omogućava sažeto i generičko progamiranje. Podržava kompaktan i ekspresivan način definisanja {\it listi} kao osnovnih struktura funkcionalnog programiranja. Naglašava upotrebu rekurzije.
+\\
+Funkcije višeg reda omogućavaju visok nivo apstrakcije i korišćenja funkcijskih oblikovnih obrazaca (uočavanje obrazaca izračunavanja koja se često sprovode i njihovo izdvajanje u funkcije višeg reda). Haskell ima podršku za monadičko programiranje koje omogućava da se propratni efekti izvedu bez narušavanja referentne transparentnosti.
+
+Ima razrađenu biblioteku standardnih funkcija (Standard Library) i dodatnih modula (Hakage). Standardizaciju sprovodi međunarodni odbor (Haskell Commitee).
+
+\begin{itemize}
+\item \href{http://www.haskell.org/documentation}{Haskell dokumentacija}
+\item \href{http://book.realworldhaskell.org/}{Real world Haskell -- knjiga}
+\item \href{http://wiki.haskell.org/Haskell_in_industry}{Wiki -- Haskel u industriji}
+\item \href{http://www.haskell.org/ghc/}{GHC -- Glasgow Haskell Compiler -- interaktivni interpreter i kompajler}
+\item \href{http://wiki.haskell.org/IDEs}{Razvojno okruženje za Haskell}
+\end{itemize}
+GHC je kompajler koji proizvodi optimizovan kod koji se može upotrebljavati za stvarne primene. Ekstenzija za Haskell kod je \texttt{.hs}. Interpreter je \texttt{ghci}.
+
+\begin{boxprimer}
+\begin{Verbatim}
+
+GHCI, version 7.4.1: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude>
+
+\end{Verbatim}
+\end{boxprimer}
+
+\noindent Biblioteka \texttt{Prelude} definiše osnovne funkcije.\\
+\texttt{:help, :?, :h} -- prikazivanje komandi interpretera \\
+\texttt{:quit, :q} -- izlazak iz interpretera
+
+\begin{boxprimer}
+\begin{Verbatim}
+
+Prelude> :help
+Commands avaliable from the prompt:
+
+<statement>		 evaluate/run <statement>
+:			   repeat last command
+:{\n ..lines.. \n:} 	multiline command
+:add [*]<module> ...	add module(s) to the current target set
+:browse[!] [[*]<mod>]       display the names defined by module <mod>
+(!: more details; *: all top-level names)
+:cd <dir>		   change directory to <dir>
+:cmd <expr>		 run commands returned by <expr>::IO String
+:ctags[!] [<file>]	  create tags file for Vi (default: ''tags'')
+(!: use regex instead of line number)
+:def <cmd> <expr>	   define a command :<cmd>
+:edit <file>		edit file
+...
+
+\end{Verbatim}
+\end{boxprimer}
+
+%DVE KOLONE
+\begin{multicols}{2}
+\begin{boxprimer}%[width=\linewidth/2]
+\begin{Verbatim}
+Prelude> putStrLn ''Hello, World!''
+Hello, World!
+
+Prelude> 2+3-1
+4
+Prelude> 9/2
+4.5
+Prelude> div 9 2
+4
+Prelude> it^5
+1024
+
+Prelude> sqrt 2			
+1.4142135623730951
+
+Prelude> sqrt (abs (-2))	
+1.4142135623730951
+\end{Verbatim}
+\end{boxprimer}
+
+\columnbreak
+
+Primena funkcije se piše bez zagrada, kao u lambda računu, ali zagrade mogu da budu potrebne za grupisanje argumenata. Primena funkcije je {\it levo asocijativna}, tako da bez zagrada, poslednji izraz u primeru bi se tumačio kao primena \texttt{sqrt} na funkciju \texttt{abs} (sto interpreter prijavi kao grešku jer se ne poklapaju tipovi).
+Ako funkcija uzima više argumenata, koristi se Curryjev postupak.
+
+\end{multicols}
+
+
+% DVE KOLONE
+\begin{multicols}{2}
+
+\begin{boxprimer}%[width=\linewidth/2] ovo ne treba navoditi jer onda posmatra velicinu kolone kao line
+\begin{Verbatim}
+Prelude> (max 3) 10
+10
+Prelude> max 3 10
+10
+Prelude> max (sqrt 625) 10
+25.0
+\end{Verbatim}
+\end{boxprimer}
+
+\columnbreak
+
+Primena funkcije \texttt{max} na 3 daje kao rezultat funkciju koja se primenjuje na broj 10, čiji je rezultat broj 10. Zbog leve asocijativnosti ne moraju da se pišu zagrade i dovoljno je samo \texttt{max 3 10}.
+
+\end{multicols}
+
+
+Liste su posebno bitne u deklarativnim jezicima. 
+
+\begin{boxprimer}[breakable]
+\begin{Verbatim}
+Prelude> [1,2,3]
+[1,2,3]
+Prelude> [1..20]
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+Prelude>[1,3..40]
+[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39]
+Prelude> [1,6..90]
+[1,6,11,16,21,26,31,36,41,46,51,56,61,66,71,76,81,86]
+Prelude> [1,6..]		-- beskonacna lista!
+Prelude>['A'..'F']
+"ABCDEF"
+Prelude> [’A’..’z’]
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_‘abcdefghijklmnopqrstuvwxyz"
+Prelude> [5..1]
+[]
+Prelude>[5,4..1]
+[5,4,3,2,1]
+
+\end{Verbatim}
+\end{boxprimer}
+
+%DVE KOLONE
+\begin{multicols}{2}
+{\bf Funkcije za rad sa listama:}
+\begin{boxprimer}[breakable]
+\begin{Verbatim}
+Prelude> head [1,2,3,4,5]
+1
+Prelude> length [1..5]
+5
+Prelude> take 2 [1,2,3,4,5,6]
+[1,2]
+Prelude>sum [1,6..90]
+783
+Prelude>head [’a’, ’b’, ’c’]
+'a'
+Prelude> [0..10] !! 5
+5
+Prelude> [0,2..] !! 50
+100
+\end{Verbatim}
+Lenjo izracunavanje -- lista jeste beskonačna, ali nama treba 50-ti element i lista će samo dotle biti sračunata.
+\end{boxprimer}
+
+\end{multicols}
+
+\begin{boxprimer}[width=\linewidth/2]
+\begin{Verbatim}
+Prelude> foldl (+) 0 [1,2,3]
+6
+Prelude> foldr (+) 0 [1,2,3]
+6
+Prelude> foldl (-) 0 [1,2,3]
+-6
+Prelude> foldr (-) 0 [1,2,3]
+2
+\end{Verbatim}
+\end{boxprimer}
+
+
+\begin{boxprimer}[breakable]
+\begin{Verbatim}
+Prelude> map (+1) [1,5,3,1,6]
+[2,6,4,2,7]
+Prelude> map (++ "!") ["Zdravo", "Dobar dan", "Cao"]
+["Zdravo!", "Dobar dan!", "Cao!"]
+Prelude> map (replicate 3) [3..6]
+[[3,3,3],[4,4,4],[5,5,5],[6,6,6]]
+Prelude> map (map (^2)) [[1,2],[3,4,5,6],[7,8]]
+[[1,4],[9,16,25,36],[49,64]]
+Prelude> map fst [(1,2),(3,5),(6,3),(2,6),(2,5)]
+[1,3,6,2,2]
+Prelude> filter (>3) [1,5,3,2,1,6,4,3,2,1]
+[5,6,4]
+Prelude> filter (==3) [1,2,3,4,5]
+[3]
+Prelude> filter even [1..10]
+[2,4,6,8,10]
+Prelude> sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+166650
+Prelude> [ x^2 | x <- [1..5]]
+[1,4,9,16,25]
+Prelude> [(x,y) | x<-[1,2,3], y <- [4,5]]
+[(1,4),(1,5),(2,4),(2,5),(3,4),(3,5)]
+Prelude> [(x,y) | x<-[1..10], y <- [1..10], x+y==10]
+[(1,9),(2,8),(3,7),(4,6),(5,5),(6,4),(7,3),(8,2),(9,1)]
+
+\end{Verbatim}
+\end{boxprimer}
+
+\begin{multicols}{2}
+{\bf Definisanje funkcije:}
+\begin{boxprimer}%[width=\linewidth/2]
+\begin{Verbatim}
+Prelude> let uvecaj x = x+1
+Prelude> uvecaj 5
+6
+Prelude> uvecaj 55.5
+56.5
+\end{Verbatim}
+\end{boxprimer}
+\columnbreak
+{\bf Osnovni tipovi:}
+\begin{boxprimer}%[width=\linewidth/2]
+\begin{Verbatim}
+Prelude> let x = 3
+Prelude> :type x
+x :: Integer
+Prelude> let x = ’a’
+Prelude> :type x
+x :: Char
+Prelude> let x="pera"
+Prelude> :type x
+x :: [Char]
+\end{Verbatim}
+\end{boxprimer}
+\end{multicols}
+Prethodni primeri su mogli da se isprobaju u interpreteru jer su bili kratki i jednostavni. Za pisanje programa u Haskell-u koristi se kompajler. Kod pišemo u datoteci sa ekstenzijom \texttt{.hs}. Ukoliko želimo da napravimo izvršnu verziju, potrebno je da definišemo main funkciju od koje će početi izvršavanje.
+\\
+{\bf Prevođenje:} \texttt{ghc 1.hs}
+\\
+{\bf Pokretanje:} \texttt{./1}
+\\
+Možemo napisati i kod koji sadrži samo definicije funkcija koje učitavamo u interpreter kao modul i koristimo:
+\\
+\texttt{Prelude> :load 1.hs}
+\\
+Izlazak sa \texttt{*Main> :module}
+
+\begin{multicols}{2}
+{\bf Tipovi funkcija}\\
+Funkcija argumente jednog tipa preslikava u argumente drugog tipa. Na primer: $\longrightarrow$
+\\
+Tipovi se mogu navesti prilikom definicije funkcije.
+\columnbreak
+\begin{boxprimer}[width=\linewidth/2]
+\begin{Verbatim}
+Bool -> Bool
+Int -> Int
+[Char] -> Int
+(Int, Int) -> Int
+...
+\end{Verbatim}
+\end{boxprimer}
+\end{multicols}
+
+%DVE KOLONE
+\begin{multicols}{2}
+
+{\bf Tipske promenljive}\\
+Mogu se koristiti i tipske promenljive a, b, \ldots Na primer: \texttt{length :: [a]}. \texttt{Int} označava da \texttt{a} može da bude bilo koji tip \texttt{reverse :: [a]}. \texttt{[a]} je oznaka da tip prve i druge liste moraju da budu iste. Većina standardnih funkcija je definisano na ovaj način, tj za razne tipove.
+
+\columnbreak
+\begin{boxprimer}
+\begin{Verbatim}
+Prelude> length [1,2,3]
+3
+Prelude> length ''abcde''
+5
+Prelude> :type length
+length :: [a] -> Int
+\end{Verbatim}
+\end{boxprimer}
+
+\end{multicols}
+
+Prethdno smo upotrebljavali kada imamo različite tipove nad istom strukturom podataka. {\it Preopterećivanje} koristimo kada su nad različitim strukturama podataka definisane iste operacije (na primer $+$ za cele i realne brojeve). Preopterećivanje se ostvaruje preko {\it tipskih razreda}. 
+\\
+Tipski razred definiše koje funkcije neki tip mora da implementira da bi pripadao tom razredu.
+\begin{itemize}
+\item EQ -- Tipovi sa jednakošću $==/=$
+\item ORD -- Tipovi sa uređenjem (nasleđuje EQ) $<, >, <=, ...$
+\item NUM -- Numerički tipovi (nasleđuje ORD) $+, -, *, ...$
+\item INTEGRAL -- Celobrojni tipovi (nasleđuje NUM) $div, mod$
+\item FRACTIONAL -- Razlomački tipovi (nasleđuje NUM) $/ , recip$
+\end{itemize}
+Tipskim razredim se ograničavaju funkcije. Na primer, \texttt{sum :: Num a => [a] -> a} sumiranje može da se definiše samo nad numeričkim tipovima. 
+
+\begin{boxprimer}[breakable]
+\begin{Verbatim}
+Prelude> sum [1,2,3]
+6
+Prelude> sum ['a','b','c']
+
+<interactive>:52:1:
+No instance for (Num Char)
+arising for a use of 'sum'
+Possible fix: add an instance declaration for (Num Char)
+In the expresion: sum['a','b','c']
+In an equation for `it': it = sum ['a','b','c']
+
+Prelude> elem 45 [1,3..]  -- za 46 se ne bi zaustavilo
+True
+Prelude> :t elem
+elem :: Eq a => a -> [a] -> Bool
+
+Prelude> :t max
+max :: Ord a => a -> a -> a
+Prelude> max ''abc'' ''cde''
+''cde''
+\end{Verbatim}
+\end{boxprimer}
+
+
+%DVE KOLONE
+\begin{multicols}{2}
+{\it \bf Karijeve funkcije} argumente uzimaju jedan po jedan što ih čini veoma fleksibilnim. Mogu se delimično evaluirati, tako da se definišu nove funkcije kojima su neki argumenti početne funkcije fiksirani. Delimičnom evaluacijom se fiksiraju levi argumenti funkcije.
+
+\columnbreak
+
+\begin{boxprimer}
+\begin{Verbatim}
+pomnozi :: Int -> Int -> Int -> Int
+pomnozi i j k = i*j*k
+
+*Main> let p3 = pomnozi 3
+*Main> :t p3
+p3 :: Int -> Int -> Int
+*Main> let p34 = p3 4
+*Main> :t p34
+p34 :: Int -> Int
+*Main> p34 2
+24
+*Main> p34 5
+60
+\end{Verbatim}
+\end{boxprimer}
+
+\end{multicols}
+
+\end{document}

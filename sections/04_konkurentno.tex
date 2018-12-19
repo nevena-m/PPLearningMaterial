@@ -1,0 +1,282 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\pagebreak
+\begin{boxnaslovi}
+\section{Konkurentno programiranje} 								% { 9 }
+\end{boxnaslovi}
+
+\subsection{Uvod}										% { 9 } [ 1 ]
+
+{\it Konkurentnu paradigmu} karakteriše više procesa koji se izvršavaju u istom vremenskom periodu, a koji imaju zajednički cilj. 
+\\
+Konkurentnost nije nova ideja. Veliki deo teorijskih osnova datira još iz 1960-ih godina, a već Algol68 sadrži podršku za konkurentno programiranje. Međutim, široko je rasprostranjen interes za konkurenost poslednjih 20-ak godina. Uzroci tome, kao i motivacija za korišćenje konkurentnog programiranja, su:
+\begin{description}
+\item[Podrška logičkoj strukturi problema] \hfill
+
+Porast broja grafičkih, multimedijalnh i veb-zasnovanih aplikacija koje se sve prirodno predstavljaju konkurentnim nitima.
+\item[Dobijanje na brzini] \hfill
+
+Dostupnost jeftinih viseprocesorskih masina
+
+\item[Rad sa fizički nezavisnim uređajima] \hfill
+
+Potreba za umrežavanjem računara (frame računara) i različitih uređaja.
+\end{description}
+
+\subsubsection{Podrška logičkoj strukturi problema}			% { 9 } [ 1 . 1 ]
+Konkurentni mehanizmi su originalno izmišljeni za rešavanje određenih problema u okviru operativnih sistema, ali se sada koriste u raznim aplikacijama. Mnogi programi moraju da vode računa istovremeno o više nego jednom zadatku koji je u velikoj meri nezavisan, pa je u takvim situacijama logično da se zadaci podele u različite kontrolne niti.
+\\
+\indent Primer aplikacije čiji se dizajn oslanja na konkurentnost je veb pregledač (eng. web browser). On mora da izvršava više različitih funkcionalnosti istovremeno (konkurentnost na nivou jedinica), npr primanje i slanje podataka serveru, prikaz teksta i slika na ekranu, reagovanje na korisničke akcije mišom i tastaturom\ldots
+U ovom slučaju konkurentnost može da se odnosi i na {\it konkurentnost u užem smislu} koja obuhvata jedan procesor, a konkurentnost se ostvaruje implementiranjem izvršavanja različitih niti ili procesa.
+
+\subsubsection{Dobijanje na brzini}						% { 9 } [ 1 . 2 ]
+Ukoliko imamo više procesora, treba ih iskoristiti da bi se dobilo na brzini. Više procesora odgovara {\it paralelnom programiranju}. Paralelno programiranje može da se odnosi i na više procesora na različitim mašinama, ali se najčešće misli na višeprocesorsku mašinu. Procesi međusobno komuniciraju preko zajedničke memorije (ukoliko je višeprocesorska mašina u pitanju) ili slanjem poruka.
+\\
+Dobijanje na brzini može da se ostvari i kod jednoprocesorske mašine konkurentnim izvršavanjem. Program, po prirodi, ne mora da bude u potpunosti sekvencijalan i to se moze iskoristiti.
+
+\subsubsection{Zajednički rad fizički nezavisnih uređaja}		% { 9 } [ 1 . 3 ]
+Aplikacije koje rade distribuirano korišćenjem različitih mašina, bilo da su u pitanju lokalno povezane mašine ili internet -- {\it distribuirano programiranje}. Procesi međusobno salju poruke da bi razmenili informacije. Može se shvatiti kao vrsta paralelnog izračunavanja, ali sa drugačijom međusobnom komunikacijom koja nameće nove izazove. Postoje jezici dizajnirani za distribuirano programiranje, ali oni nisu u širokoj upotrebi.
+
+\subsubsection{Veza sa programskim jezicima}		% { 9 } [ 1 . 4 ]
+Na prvi pogled, konkurentnost može da izgleda kao jednostavan koncept. Pisanje konkurentnih programa je značajno teže od pisanja sekvencijalnih programa. Za osnovne koncepte konkurentnog programiranja potrebno je obezbediti odgovarajuću podršku u programskom jeziku.
+\\
+Postoje dve vrste konkurentnosti, {\it fizička} konkurentnost (podrazumeva postojanje vše procesora) i {\it logička} konkurentnost. Sa stanovišta programera i dizajna programskog jezika, logička konkurentnost je ista kao i fizička.
+\\
+\indent Zadatak implementacije jezika je da korišćenjem operativnog sistema preslika logičku konkurentnost u odgovarajući hardver.
+Osnovni problem se odnosi na pitanja komunikacije i sinhronizacije procesa, kao i pitanje pristupa zajedničkim podacima. Veliki izazov za programere, dizajnere programskih jezika i dizajnere operativnih sistema (dobar deo podrške za konkurentnost obezbeđuje operativni sistem).
+
+\subsubsection{Hijerarhijska podela konkurentnosti}		% { 9 } [ 1 . 5 ]
+\begin{itemize}
+\item {\it Konkurentna paradigma} je najširi pojam, tj konkurentnu paradigmu karakteriše više procesa koji se izvršavaju u istom vremenskom periodu.
+\item {\it Paralelna paradigma} je specijalizacija koja obuhvata postojanje više procesora.
+\item {\it Distribuirana paradigma} je specijalizacija paralelne paradigme u kojoj su procesori i fizički razdvojeni
+\end{itemize}
+
+Međutim, sa stanovišta semantike ove podele nemaju značajnu ulogu, one su bitne po pitanju implementacije i performansi.
+\\
+Postoje 4 osnovna nivoa konkurentnosti:
+\begin{enumerate}
+\item Nivo instrukcije -- izvršavanje dve ili više instrukcija istovremeno.
+\item Nivo naredbe -- izvršavanje dve ili više naredbi jezika višeg nivoa istovremeno.
+\item Nivo jedinica -- izvršavanje dve ili više jedinica (potprograma) istovremeno.
+\item Nivo programa -- izvršavanje dva ili više programa istovremeno.
+\end{enumerate}
+Prvi i četvrti nivo konkurentnosti ne utiču na dizajn programskog jezika.
+
+\subsubsection{Skalabilnost i portabilnost}				% { 9 } [ 1 . 6 ]
+
+Konkurentnim programiranjem treba da se proizvedu skalabilni i portabilni algoritmi. {\it Skalabilnost} se odnosi na ubrzavanje izvršavanja porastom broja procesora. Ovo je važno jer se broj dostupnih procesora stalno povećava. Naravno, u razmatranju skalabilnosti mora se uzeti u obzir i priroda problema i njegova prirodna ograničenja (porast broja procesora nakon neke granice ne mora da ima pozitivan efekat). Idealna bi bila {\it linearna skalabilnost}, ali ona je retka.
+\\
+{\it \bf Amdahlov zakon} -- mali delovi programa koji se ne mogu paralelizovati ce ograničiti mogućnost ukupnog ubrzavanja paralelizacijom (npr ako je $\alpha = 10\%$ koda koji se ne može paralelizovati, onda je maksimalno ubrzanje paralelizacijom $1/\alpha$, tj u ovom slucaju 10 puta, bez obzira na broj procesora koji se dodaju).
+\\
+Komunikacija predstavlja dodatno usporavanje.
+\\
+{\it Portabilnost} se odnosi na nezavisnost od konkretne arhitekture -- životni vek hardvera je kratak, stalno izlaze nova hardverska rešenja i dobar algoritam mora da ne zavisi od hardvera.
+
+
+\subsection{Osnovni koncepti}								% { 9 } [ 2 ]
+
+Za konkurentno programiranje potrebna je podrška u okviru programskog jezika, ili u okviru biblioteka. Da bi se razmatrala podrška koju je potrebno da programski jezik pruži, najpre je potrebno razumeti osnovne koncepte konkurentnosti. Nažalost, terminologija u okviru različitih autora, programskih jezika i operativnih sistema nije konzistentna.
+
+\subsubsection{Zadatak, nit, proces}							% { 9 } [ 2 . 1 ]
+
+Zadatak (eng. {\it task}), ili posao, je jedinica programa, slična potprogramu, koja može da se izvrši konkurentno sa drugim jedinicama istog programa. Zadatak se razlikuje od potprograma na 3 načina:
+\begin{itemize}
+\item Zadaci mogu da počnu implicitno, ne moraju eksplicitno da budu pozvani.
+\item Kada program pokrene neki zadatak, ne mora uvek da čeka na njegovo izvršavanje pre nego što nastavi sa svojim.
+\item Kada se izvršavanje zadatka završi, kontrola ne mora da se vrati na mesto odakle je počelo izvršavanje.
+\end{itemize}
+Svaki zadatak u programu moze da bude podržan od strane jedne kontrolne niti ili procesa.
+\\
+Zadaci se dele na dve opšte kategorije: {\it \bf heavyweight} i {\it \bf lightweight}. Teški imaju svoj sopstveni adresni prostor dok laki dele isti adresni prostor.
+\\
+\indent Teškim zadacima upravlja operativni sistem obezbeđujući deljenje procesorskog vremena, pristup datotekama, adresni prostor. Prelaz sa jednog teškog zadatka na drugi vrši se posredstvom operativnog sistema uz pamćenje stanja prekinutog procesa (to je skupa operacija). Stanje teškog zadatka obuhvata:
+\begin{itemize}
+\item Podatke o izvršavanju (stanje izvršavanja koje može biti spreman, radi, čeka,\ldots), vrednosti registara, brojač instrukcija.
+\item Informacije o upravljanju resursima (informacije o memoriji, datoteke, ulazno-izlazni zahtevi i ostali resursi)
+\end{itemize}
+
+{\it Promena konteksta} je promena stanja procesora koja je neophodna kada se sa izvršavanjem jednog teškog zadatka prelazi na izvršavanje drugog teškog zadatka: potrebno je zapamtiti u memoriji stanje zadatka koji se prekida i na osnovu informacija u memoriji rekonstruisati stanje zadatka koji treba da nastavi izvršavanje. Promena konteksta je skupa, a to nije zanemarljivo. Dešava se veoma često, od nekoliko puta do par stotina ili hiljada puta u jednoj sekundi. Podaci o stanju procesa zauzimaju memoriju koja nije zanemarljiva, a bitna je i u kontekstu promašivanja u kešu koje značajno utiče na performanse sistema.
+\\
+\indent Koncept lakih zadataka se uvodi kako bi se omogućio efikasniji prelaz sa jednog na drugi zadatak. Za razliku od teških zadataka, laki ne zahtevaju posebne računarske resurse koje on obuhvata. Podaci o lakom zadatku obuhvataju samo njegovo stanje izvršavanja, brojač instrukcija i vrednost radnih registara. Prelaz sa jednog lakog zadatka na drugi je stvar izmene sadržaja radnih registara i pamćenja brojača instrukcija i stanja izvršavanja i vrši se brzo.
+\\
+Upravljanje nitima ostvaruje se preko korisničkih biblioteka. Tri najpoznatije biblioteke su:
+\begin{itemize}
+\item POSIX Pthreads
+\item Java threads
+\item Win32 threads
+\end{itemize}
+Kada je reč o operativnim sistemima, niti su podržane u:
+\begin{itemize}
+\item Windows XP/2000, Vista, 7, \ldots
+\item Linux
+\item Solaris, Tru64 UNIX, Mac OS X
+\end{itemize}
+
+Terminologija je nekonzistentna. Na primer, u C-u teški zadaci su procesi (koji imaju svoj adresni prostor), laki zadaci su niti (koje imaju zajednički adresni prostor). Kreiranje lakih zadataka je efikasnije od kreiranja teških. Sistemski poziv \texttt{fork} je za kreiranje novih procesa. Biblioteka \texttt{pthread} je za kreiranje niti.
+
+\subsubsection{Izbor nivoa konkurentnosti}						% { 9 } [ 2 . 2 ]
+
+Osnovna odluka koju programer mora da donese kada piše paralelni program je kako da podeli posao. Šta paralelizovati?
+\begin{boxprimer}
+Za svaki broj iz niza brojeva odrediti koja od narednih svojstava ispunjava:
+\begin{multicols}{2}
+\begin{itemize}
+\item broj je prost,
+\item broj je savršen,
+\item broj je deljiv sumom svojih cifara,
+\columnbreak
+\item broj ima paran broj delilaca,
+\item broj je jednak zbiru kubova svojih cifara.
+\end{itemize}
+\end{multicols}
+\end{boxprimer}
+
+Najčešća strategija, koja dobro radi na malim mašinama, je da se koriste različite niti za svaki od glavnih programerskih zadataka ili funkcija. Na primer, kod procesora reči, jedan zadatak bi mogao da bude zadužen za prelamanje paragrafa u linije, drugi za određivanje strana i raspored slika, treći za pravopisnu proveru i proveru gramatičkih gresaka, četvrti za renderovanje slika na ekranu,\ldots
+Ova strategija se obično naziva {\it \bf paralelizam zadataka}. Njen nedostatak je da ne skalira prirodno dobro ukoliko imamo veliki broj pocesora.\\
+Za dobro skaliranje na velikom broju procesora, potreban je {\it \bf paralelizam podataka}. Kod paralelizma podataka, iste operacije se pimenjuju konkurentno na elemente nekog velikog skupa podataka. Na primer, program za manipulaciju slikama, može da podeli ekran na $n$ manjih delova i da koristi različite niti da bi procesirao svaki taj pojedinačni deo. Ili, igrica može da koristi posebnu nit za svaki objekat koji se pokreće.
+\\
+\indent Program koji je dizajniran da koristi paralelizaciju podataka najčešće se zasniva na paralelizaciji petlji: Svaka nit izvršava isti kod, ali korišćenjem različitih podataka. Za ovu vrstu paralelizma se najčešće koristi paralelizam na nivou naredbi. Na primer, u C\#, ukoliko se koristi {\it Parallel FX Library}:
+\\ \texttt{Parallel.For(0, 100, i => \{ A[i] = foo( A[i] ) ; \} );}
+\\
+Neophodno je da programer zna da su pozivi funkcije \texttt{foo} međusobno nezavisni, ukoliko nisu, neophodna je {\it \bf sinhronizacija}. Idealno bi bilo kada bi kompajler mogao sam da zaključi da je nešto nezavisno i da sam obavi paralelizaciju umesto nas, ali, nažalost u opštem slučaju to nije moguće.
+\\
+Paralelizacija podataka je prirodna za neke vrste problema, ali nije za sve.
+\begin{boxprimer}
+\begin{itemize}
+\item Proizvod komponenti vektora
+\item Skalarni proizvod dva vektora
+\item Množenje matrica
+\item Pronalaženje prostih brojeva u nizu
+\item Pronalaženje brojeva koje imaju određenu osobinu (prosti, savršeni, blizanci, Armstrongovi,\ldots) i pripadaju intervalu $[n,m]$.
+\end{itemize}
+\end{boxprimer}
+
+\subsubsection{Komunikacija}								% { 9 } [ 2 . 3 ]
+
+Zadaci međusobno moraju da komuniciraju. Komunikacija se odnosi na svaki mehanizam koji omogućava jednom zadatku da dobije informacije od drugog. Može se ostvariti preko zajedničke memorije(ukoliko zadaci dele memoriju) ili slanjem poruka.
+\\
+\indent Ukoliko imamo zajedničku memoriju, izabranim promenljivama se može pristupiti iz različitih zadataka (ovo se, pre svega, odnosi na komunikaciju između lakih zadataka). Da bi dva zadatka komunicirala, jedan upiše vrednost promenljive, a drugi je jednostavno pročita. U ovom slučaju, važan je redosled čitanja i pisanja promenljivih i potrebno je starati se o ispravnom korišćenju resursa i eventualnim sukobima.
+\\
+\indent Slanje poruka se može upotrebljavati uvek, i kada zadaci imaju i kada nemaju zajedničku memoriju. U tom slučaju, da bi se ostvarila komunikacija, jedan zadatak mora eksplicitno da pošalje podatak drugom. Slanje poruka može da se ostvari na razne načine. Mogu se koristiti tokovi, signali, cevi, soketi, kanali (mehanizmi međuprocesne komunikacije)\ldots
+\\
+Ukoliko je slanje poruka u okviru iste mašine, onda se ono smatra pouzdanim. Slanje poruka u distribuiranim sistemima nije pouzdano jer podaci putuju kroz mrežu gde mogu da se zagube i tu su potrebni dodatni mehanizmi i protokoli komunikacije. Za slanje poruka u distribuiranim sistemima koriste se različiti protokoli.
+
+\subsubsection{Sinhronizacija} 								% { 9 } [ 2 . 4 ]
+Sinhronizacija se odnosi na mehanizam koji dozvoljava programeru da kontroliše redosled u kojem se operacije dešavaju u okviru različitih zadataka. Sinhronizacija je obično implicitna u okviru modela slanja poruka: poruka prvo mora da se pošalje da bi mogla da se primi, tj ako zadatak pokuša da primi poruku koja još nije poslata, mora da sačeka pošiljaoca da je najpre pošalje. 
+\\
+Sinhronizacija nije implicitna u okviru modela deljene memorije. Postoje dve vrste sinhronizacije kada zadaci dele podatke: {\it saradnja} i {\it takmičenje}. Sinhronizacija saradnje je neophodna između zadatka A i zadatka B kada A mora da čeka da B završi neku aktivnost pre zadatka A da bi zadatak A mogao da pošne ili da nastavi svoje izvršavanje. Primer: proivođač-potrosač.
+\\
+Sinhronizacija takmičenja je neophodna između dva zadatka kada oba zahtevaju nekakav resurs koji ne mogu istovremeno da koriste. Na primer ako zadatak A treba da pristupa deljenom podatku x dok B pristupa x, tada zadatak A mora da čeka da zadatak B završi procesiranje podatka x.
+
+\begin{boxprimer}
+Ukoliko zadatak A treba da vrednost deljene promenljive uveća za 1, dok zadatak B treba da vrednost deljene promenljive uveća 2 puta, onda ukoliko nema sinhronizacije, kao rezultat rada ovih vrednosti mogu da se dese različite situacije.
+
+\begin{Verbatim}
+x = 3;
+A : x = x + 1;
+B : x = 2 * x;
+\end{Verbatim}
+
+Na mašinskom nivou, imamo sledeća tri koraka: uzimanje vrednosti, izmena, upisivanje nove vrednosti. Bez sinhronizacije, ukoliko je početna vrednost 3, mogući ishodi su:
+\begin{itemize}
+\item 8 -- ako se A prvo izvrši, pa zatim B
+\item 7 -- ukoliko se B prvo izvrši, pa zatim A
+\item 6 -- ukoliko A i B uzmu istovremeno vrednost, ali je A prvi upiše nazad, pa je zatim B prepiše
+\item 4 -- ukoliko A i B uzmu istovremeno vrednost, ali je B prvi upiše nazad, pa je zatim A prepiše
+\end{itemize}
+\end{boxprimer}
+
+Situacija koja vodi do ovih problema naziva se {\it \bf uslov takmičenja} (eng.{\it race condition}) jer se dva ili više zadataka takmiče da koriste deljene resurse i ponašanje programa zavisi od toga ko pobedi na takmičenju, tj ko stigne prvi. Osnovna uloga sinhronizacije je da za sekvencu instrukcija koju nazivamo {\it kritična sekcija} obezbedi da se izvrši atomično, tj da se sve instrukcije kritične sekcije izvrše bez prekidanja.
+\\
+\indent Za kontrolisanje pristupu deljenim resursima, koristi se {\it \bf zaključavanje} ili uzajamno isključivanje. Za uzajamno isključivanje mogu se koristiti npr {\it semafori} ili {\it monitori}.
+\\
+Semafori su prvi oblik sinhronizacije, implementiran vec u Algol68, i dalje prisutni, npr u Javi. Imaju dve moguće operacije, P i V (ili wait i release). Nit koja poziva P atomično umanjuje brojač i čeka da $n$ postane nenegativan. Nit koja poziva V atomično uvećava brojač i budi čekajuću nit, ukoliko postoji. Iako se široko koriste, semafori se takođe smatraju kontrolom niskog nivoa, nepogodnom za dobro struktuiran i lako održiv kod. Korišćenje semafora lako dovodi do {\it grešaka} i do {\it uzajamnog blokiranja}.
+\\
+Drugi koncept su monitori koji enkapsuliraju deljene strukture podataka sa njihovim operacijama, tj čine deljene podatke apstraktnim tipovima podataka sa specifičnim ograničenjima. Monitori su prisutni npr u Javi (modifikator {\it synchronized}, C\#(klasa {\it Monitor}),\ldots
+I monitori se takođe smatraju kontrolom niskog nivoa.
+\\
+Mutex -- {\it mutual exclusion} (postoje u C++, ne postoje u Javi).
+Atomično zaključavanje, samo jedna nit može zaključati podatak, ako je muteks već zaključan, nit koja želi da ga zaključa mora da sačeka na njegovo otključavanje. \\
+Semantika katanca -- osnovni način bezbednog deljenja podataka u konkurentnom okruženju. Ima različit pristup pod različitim uslovima (npr više njih može da čita, samo jedan može da piše, tako da niko drugi ne sme da čita).
+\\
+\indent I kod deljene memorije i kod slanja poruka, sinhronizacija može da se implementira na dva načina: {\it \bf zauzetim čekanjem} ili {\it \bf blokiranjem}.
+\\
+{\it Busy-waiting synchronization} -- zadatak u petlji stalno proverava da li je neki uslov ispunjen (da li je poruka stigla ili da li deljena promenljiva ima neku određenu vrednost). Nema smisla na jednom procesoru.
+\\
+{\it Blokirajuća sinhronizacija} -- zadatak svojevoljno oslobađa procesor, a pre toga ostavlja poruku u nekoj strukturi podataka zaduženoj za sinhronizaciju. Zadatak koji ispunjava uslov u nekom trenutku naknadno, pronalazi poruku i sprovodi akciju da se prvi zadatak odblokira, tj da nastavi sa radom.
+
+\subsubsection{Koncept napredovanja (eng. {\it liveness})}
+
+Kod sekvencijalnog izvrsavanja programa, program ima karakteristiku napredovanja ukoliko nastavlja sa izvršavanjem, dovodeći do završetka rada programa u nekom trenutku (ukoliko program ima osobinu da se završava, npr nema beskonačnih petlji). Opštije, koncept napredovanja govori da ukoliko neki događaj treba da se desi (npr završetak rada programa) da će se on i desiti u nekom trenutku, odnosno da se stalno pravi nekakav progres tj napredak. 
+\\
+U konkurentnoj sredini sa deljenim objektima, napredak zadatka može da prestane, odnosno može da se desi da program ne može da nastavi sa radom i da zbog toga nikada ne završi svoj rad.
+\begin{boxprimer}
+Na primer, pretpostavimo da oba zadatka, A i B, zahtevaju resurse X i Y da bi mogli da završe svoj posao. Ukoliko se desi da zadatak A dobije resurs X, a da zadatak B dobije Y, tada da bi nastavili sa radom, zadatku A treba resurs Y, a zadatku B treba X, i oba zadatka čekaju onaj drugi da bi nastavili sa radom. Na taj način, oba gube napredak i program ne moze da završi sa radom normalno.
+\end{boxprimer}
+
+Prethodno opisan način gubitka napredka naziva se {\it \bf uzajamno blokiranje}, smrtonosno blokiranje (eng.{\it \bf deadlock}). Deadlock je ozbiljna pretnja pouzdanosti programa i zahteva ozbiljna razmatranja i u jeziku i u dizajnu programa.
+\\
+{\it \bf Livelock} (živo blokiranje) -- kada svi zadaci nešto rade, ali nema progresa.
+\\
+{\it \bf Lockout} ({\it individual starvation}) -- mogućnost da jedan zadatak sprečava izvršavanje drugog.
+
+\begin{multicols}{2}
+\captionof{figure}{Problem filozofa koji večeraju, Hoare, 1985.}
+
+\begin{center}
+\resizebox{.3\textwidth}{!}{%
+\begin{tikzpicture}[-, every node/.style = {shape=circle, draw, fill}]
+\node[minimum size = 5cm, fill=blue!50!green] (glavni) {};
+
+\node[minimum size = 1.5cm, fill=blue!20] at ([shift={(50:1)}]glavni.72) {};
+\node[minimum size = 1.5cm, fill=blue!20] at ([shift={(120:1)}]glavni.144) {};
+\node[minimum size = 1.5cm, fill=blue!20] at ([shift={(190:1)}]glavni.216) {};
+\node[minimum size = 1.5cm, fill=blue!20] at ([shift={(260:1)}]glavni.288) {};
+\node[minimum size = 1.5cm, fill=blue!20] at ([shift={(-20:1)}]glavni.0) {};
+
+\node[minimum size = 1cm, fill=white] at ([shift={(90:-0.8)}]glavni.72) {};
+\node[minimum size = 1cm, fill=white] at ([shift={(160:-0.8)}]glavni.144) {};
+\node[minimum size = 1cm, fill=white] at ([shift={(230:-0.8)}]glavni.216) {};
+\node[minimum size = 1cm, fill=white] at ([shift={(300:-0.8)}]glavni.288) {};
+\node[minimum size = 1cm, fill=white] at ([shift={(20:-0.8)}]glavni.0) {};
+
+\draw[-, line width = 1.5pt] ([shift={(25:-0.5)}]glavni.25) -- ([shift={(25:-1.5)}]glavni.25);
+\draw[-, line width = 1.5pt] ([shift={(-62:0.5)}]glavni.110) -- ([shift={(-62:1.5)}]glavni.110);
+\draw[-, line width = 1.5pt] ([shift={(-10:0.5)}]glavni.175) -- ([shift={(-10:1.5)}]glavni.175);
+\draw[-, line width = 1.5pt] ([shift={(60:0.5)}]glavni.240) -- ([shift={(60:1.5)}]glavni.240);
+\draw[-, line width = 1.5pt] ([shift={(140:0.5)}]glavni.315) -- ([shift={(140:1.5)}]glavni.315);
+
+\end{tikzpicture}%
+}
+\end{center}
+\columnbreak
+\begin{flushleft}
+Treba obezbediti:
+\begin{itemize}
+\item uzajamno isključivanje kritičnih sekcija
+\item pristupačnost resursima
+\item poštenost u izvršavanju
+\end{itemize}
+
+\href{http://www.usingcsp.com/cspbook.pdf}
+{Communicating Sequential Processes, Hoare -- http://www.usingcsp.com/cspbook.pdf}
+
+\end{flushleft}
+
+\end{multicols}
+
+\subsubsection{Odnos konkurentnosti, potprograma i klasa} 			% { 9 } [ 2 . 5 ]
+
+\begin{itemize}
+\item Jedinstveno pozivanje -- ne sme se istovremeno upotrebljavati u različitim nitima (npr koristi globalne promenljive ili globalne resurse na način koji nije bezbedan)
+\item Ulazne (eng. {\it reentrant}) -- može se upotrebljavati na različitim nitima ali uz dodatne pretpostavke (da se ne koriste nad istim podacima)
+\item Bezbedne po niti (eng. {\it thread-safe}) -- sme se bezbedno upotrebljavati bez ograničenja. 
+\item Slično važi i za klase.
+\item Zašto je teško naći gresku u konkurentnim programima?
+\item Preporuke bezbednog konkurentnog programiranja.
+\end{itemize}
+
+
+\end{document}

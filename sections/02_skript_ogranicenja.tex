@@ -1,0 +1,402 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\begin{boxnaslovi}
+\section {Skript programiranje}											% { 5 } POGLAVLJE
+\end{boxnaslovi}
+
+\begin{tabularx}{\textwidth}{XXXXXX}
+	\texttt{Unix Shell} & \texttt{Bash} & \texttt{PHP} & \texttt{JavaScript} & \texttt{Perl} & \texttt{Python} \\
+	\texttt{XSLT} & \texttt{VBScript} & \texttt{Lua} & \texttt{Ruby} & \texttt{...} &
+\end{tabularx}
+\\ \\
+Skript jezici su u ekspanziji. Najviše događanja na polju razvoja programskih jezika sada je u okviru razvoja skript jezika. Tradicionalni programski jezici su namenjeni za razvoj samostalnih aplikacija koje imaju za cilj da prime neku vrstu ulaza i na osnovu nje generišu odgovarajući izlaz. Međutim, upotreba računara često zahteva manipulaciju i koordinaciju različitih programa. Ručno sprovođenje ovih poslova je naporno i sklono greskama. Neki primeri primene:
+\begin{itemize}
+	\item[1:] {\it Sistem za obračun plata}. Obračunavanje vremena sa kartica, papirnih izveštaja i unosa sa tastature, manipulacija bazama podataka, poštovanje pravnih i institucionalnih regulativa, priprema poreza, doprinosa i medicinskog osiguranja, pravljenje papirnih evidencija za arhivu, \ldots
+	\item[2:] {\it Fotografija}. Fotograf treba da skine fotografije sa digitalnog fotoaparata, konvertuje u odgovarajući format, rotira slike po potrebi, napravi manje koje su pogodne za brzo razgledanje, indeksira ih po vremenu, temi, napravi bekap na udaljenoj arhivi i ponovo inicijalizuje memoriju, \ldots
+	\item[3:] {\it Kreiranje dinamičkih veb stranica}. Autentikacija \footnote[1]{proces određivanja identiteta nekog subjekta, najčešće se odnosi na fizičku osobu. U praksi subjekt daje određene podatke po kojima druga strana može utvrditi da je subjekt upravo taj kojim se predstavlja. Najčešći primjeri su: uz korištenje kartice na bankomatu i upisivanje PIN-a, ili upisivanje (korisničkog) imena i lozinke. Autentikacija se razlikuje od autorizacije; to su dva različita procesa.} i autorizacija, komunikacija sa udaljenim uređajem, manipulacija sa slikama, komunikacija sa serverom, čitanje i pisanje HTML-a.
+\end{itemize}
+
+Koordinaciju drugim programima moguće je ostvariti i u tradicionalnim programskim jezicima, kao što su Java ili C, ali to nije lako. Ovi jezici adresiraju efikasnost, lako održavanje, portabilnost i statičko otkrivanje grešaka. Sistem tipova je obično izgrađen oko koncepta kao sto su celobrojne vrednosti fiksnih veličina, brojevi u pokretnom zarezu, karakteri i nizovi. S druge strane, skript jezici imaju za cilj da adresiraju fleksibilnost, brz razvoj, lokalnu prilagodljivost i dinamičke provere. Njihovi sistemi tipova, zbog toga teže da podrže više programske koncepte, kao što su tabele, katalozi, liste, datoteke, \ldots \\
+Skript jezik je programski jezik koji služi za pisanje skriptova. Skript je spisak (lista) komandi koje mogu biti izvršene u zadatom okruženju bez interakcije sa korisnikom. U prvobitnom obliku pojavljuju se kao komandni jezici operativnih sistema (npr Bash), danas imaju najrazličitije primene. Skript jezici imaju veliku primenu na Internetu (PHP, JavaScript, Dart, Perl, \ldots). Mogu imati specifičan domen primene, ali mogu biti i jezici opšte namene (npr Python). Pošto se često koriste za povezivanje komponenti, nazivaju se ``glue languages''.
+\\
+Skript paradigma je često specifična kombinacija drugih paradigmi, kao što su: objektno-orijentisana, proceduralna, funkcionalna (pa je to razlog sto se skript paradigma ne prepoznaje uvek kao posebna paradigma). Nije uvek lako napraviti razliku između skript jezika i drugih jezika ali ipak imaju određene karakteristike na osnovu kojih se mogu izdvojiti od ostalih programskih jezika.
+
+\subsection{Karakteristike skript jezika}											% { 5 } [ 1 ]
+
+\begin{description}
+
+	\item[Interaktivno korišćenje/serijska obrada] \hfill
+
+	Većina skript jezika omogućava interaktivno korišćenje. Neki skript jezici zahtevaju da se sve komande učitaju pre nego što počne obrada, ali takvi su u manjini (npr Perl). Većina skript jezika je interpretatorskog tipa i mogu da obrađuju liniju po liniju ulaza.
+	
+	\item[Skraćeni zapis] \hfill
+
+	Skraćeni zapis zarad brzog razvoja i interaktivnog korišćenja. Primeri: 
+	\begin{boxprimer}
+	\begin{description}
+		\item[Perl, Python, Ruby:] \hfill
+			
+			\begin{verbatim} print "Hello, world\n"\end{verbatim}
+	
+		\item[Java:] \hfill	
+	\begin{Verbatim}
+class Hello {
+	public static void main(String [] args) {
+		System.out.println("Hello, world!"); 
+	}
+}
+	\end{Verbatim}
+	\end{description}
+	\end{boxprimer}
+	\item[Deklaracije i pravila dosega] \hfill
+		
+		Promenljive se obično ne deklarišu, postoje jednostavna pravila dosega. U nekim jezicima, sve promenljive su globalne (Perl), u drugim sve su lokalne (php). U Python-u svaka promenljiva je lokalna za blok u kojoj joj je dodeljena vrednost.
+	
+	\item[Dinamičko tipiziranje] \hfill
+		
+		Usled nedostatka deklaracija, većina skript jezika dinamički određuje tipove podataka. ``{\it If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck}''. U nekim jezicima (php, Ruby, Python) tip se proverava neposredno pred korišćenje, dok ce se u nekim (npr Perl) tip interpretirati drugačije u različitim kontekstima.
+	\begin{boxprimer}
+	\begin{verbatim}
+	$a = "4"
+	print $a . 3 . "\n" # ’.’ je nadovezivanje: 43
+	print $a + 3 . "\n" # ’+’ je sabiranje: 7
+	\end{verbatim}
+	\end{boxprimer}
+	\item[Sistemske funkcije] \hfill
+
+		U skript jezicima obično je omogućen lak pristup funkcionalnostima operativnog sistema. Funkcije za ulaz/izlaz, manipulacija fajlovima i direktorijumima, upravljanje procesima, pristup bazama podataka, soketi, interprocesorska komunikacija i sinhronizacija, zaštita i autorizacija, datum i sat, komunikacija preko mreže. I u drugim jezicima je to moguće, ali ne na tako jednostavan način.
+
+	\item[Manipulacija stringovima i poklapanje obrazaca] \hfill
+	
+		Skript jezici imaju svoje pretke u jezicima za procesiranje teksta i za generisanje izveštaja. Zbog toga imaju bogatu podrsku za rad sa stringovima, za poklapanje obrazaca, pretragu i slično. Ovo se obično bazira na proširenim regularnim izrazima. 
+\\
+Odrediti pravo ime funkciji osobina (tj. naći koju osobinu broja n ispituje naredna funckija u Python-u)
+\texttt{def osobina(n):} \\
+\tab \texttt{return not re.match(r'\textasciicircum .?\$|\textasciicircum(..+?)\textbackslash1+\$',  '1'*n)}
+
+	\item[Tipovi podataka visokog nivoa] \hfill
+
+		Koriste se i osnovni tipovi podataka ali u okviru same sintakse i semantike skript jezika postoji i direktna podrška za više tipove podataka. Podrška za skupove, rečnike, liste, torke, \ldots Postoji sakupljač otpadaka.
+\end{description}
+
+\subsection{Domeni upotrebe skript jezika}										% { 5 } [ 2 ]
+
+\begin{description}
+
+	\item[{\it \bf Komandni jezici} (Shell)] -- ekspanzija imena fajlova i varijabli, petlje, uslovi, pipe-ovi i redirekcija, funkcije, \#! konvencija.
+
+	\item[{\it \bf Procesiranje teksta} i generisanje izveštaja (Sed, Awk)] -- orijentisani na rad sa stringovima: pretraga, zamena, ubacivanje, brisanje, poklapanje zagrada, Perl nastao sa idejom da kombinuje Sed, Awk i sh, ali je izrastao u mnogo više od toga.
+
+	\item[{\it \bf Matematika} (moderni naslednici jezika APL: Maple, Mathematica, Matlab)] -- podrška numeričkim metodama, simbolčkoj matematici, vizuelizaciji podataka, matematičkom modelovanju
+
+	\item[{\it \bf Statistika} (S, R - open source)] -- podrška višedimenzionalnim nizovima, listama, mogu se proširivati infiksnim operatorima, funkcionalno programiranje, \ldots
+
+	\item[{\it \bf Jezici opšte namene} (Python, Ruby, \ldots)]
+
+	\item[{\it \bf Jezici proširenja}] (Adobe graficki skup - Illustrator, Photoshop, \ldots dopuštaju dopune različitim skript jezicima: JavaScript, VisualBasic ili AppleScript; AutoCAD i Flash imaju svoje skript jezike za proširenje, skript jezik Lua se često koristi u razvoju softvera za igrice, Microsoft-ovi alati obično koriste PowerShell, GIMP koristi Scheme, \ldots) -- proširuje korisnost neke aplikacije dozvoljavajući korisniku da daje nove komande koristeći postojeće komande kao gradivne blokove.
+
+	\item[{\it \bf Jezici za programiranje veba}] -- skriptovi na strani servera (php, Ruby, PowerShell, Java servlets) i skriptovi na strani klijenta (JavaScript)
+
+\end{description}
+
+%\pagebreak
+
+\begin{boxnaslovi}
+\section{Programiranje ograničenja - {\it constraint programming}}						% { 6 } POGLAVLJE
+\end{boxnaslovi}
+
+Predstavlja savremen pristup rešavanju teških kombinatornih problema. Opšti problem programiranja ograničenja predstavlja se sistemom ograničenja nad upravljačkim (nepoznatim) promenljivama. Zadatak je naći dopustivo rešenje, odnosno odrediti vrednosti promenljivih koje zadovoljavaju sva postavljena ograničenja, ili dokazati da takvo rešenje ne postoji.
+\\
+Sa aspekta naučnog istraživanja, programiranje ograničenja je multidisciplinarna oblast u kojoj se kombinuju metode i tehnike iz računarskih nauka, veštačke inteligencije, operacionih istraživanja, baza podataka, teorije grafova i logičkog programiranja. Sa aspekta prakse i primena, programiranje ograničenja je softverska tehnologija za deklarativno opisivanje i efektivno rešavanje velikih, prvenstveno kombinatornih, problema.
+\\
+Osnovna ideja u programiranju ograničenja je da korisnik najpre postavi svoj problem na odgovarajući način, tj pomoću ograničenja, a zatim pronađe rešenje korišćenjem nekog opštenamenskog rešavača ograničenja. Programiranje ograničenja je deklarativno. U njemu se relacije između promenljivih zadaju u obliku različitih ograničenja. Za razliku od imperativne paradigme, gde je postupak pronalaženja rešenja dat u koracima, ovde nije dat postupak već su postavljeni uslovi koje promenljive moraju da ispunjavaju. Od sistema se zatim očekuje da izračuna rešenje, tj da izračuna vrednosti promenljivih koje zadovoljavaju data ograničenja. \\
+Biblioteke programiranja ograničenja mogu imati različite pristupe za rešavanje problema, ali nije neophodno poznavanje algoritma koje ove biblioteke koriste. Rešavanje ograničenja se vrši različitim rešavačima, npr SAT i SMT.\\
+Ograničenja se razlikuju od ograničenja u imperativnoj paradigmi. Na primer, \texttt{x < y} u imperativnoj paradigmi se evaluira u tačno ili netačno, dok u paradigmi ograničenja zadaje relaciju između objekata x i y koja mora da važi. Ograničenja mogu da budu različitih vrsta, na primer, {\it ograničenja iskazne logike} (A ili B je tačno), {\it linearna ograničenja} (x $\le$ 15), {\it ograničenja nad konačnim domenima}. 
+
+\subsection{Primene ograničenja}											% { 6 } [ 1 ]
+
+Programiranje ograničenja ima primene pre svega u operacionim istraživanjima (tj. u rešavanju kombinatornih i optimizacionih problema). Kriptoaritmetike su zabavne i pogodne za razumevanje programiranja ograničenja, ali {\bf NISU} osnovna primena ove vrste programiranja. \\
+Kriptoaritmetike su matematičke igre u kojima se rešavaju jednacine kod kojih su cifre brojeva zamenjene ogređenim slovima. Primer:
+\begin{boxprimer}[width=\linewidth/3, breakable]
+\begin{verbatim}
+ SEND
++MORE
+-----
+MONEY	
+\end{verbatim}
+\end{boxprimer}
+
+\begin{boxprimer}[breakable]
+\begin{verbatim}
+GREEN + ORANGE = COLORS
+MANET + MATISSE + MIRO + MONET + RENOIR = ARTISTS
+COMPLEX + LAPLACE = CALCULUS
+THIS + IS + VERY = EASY
+CROSS + ROADS = DANGER
+FATHER + MOTHER = PARENT
+WE + WANT + NO + NEW + ATOMIC = WEAPON
+EARTH + AIR + FIRE + WATER = NATURE
+SATURN + URANUS + NEPTUNE + PLUTO = PLANETS
+SEE + YOU = SOON
+NO + GUN + NO = HUNT
+WHEN + IN + ROME + BE + A = ROMAN
+DONT + STOP + THE = DANCE
+HERE + THEY + GO = AGAIN
+OSAKA + HAIKU + SUSHI = JAPAN
+MACHU + PICCHU = INDIAN
+SHE + KNOWS + HOW + IT = WORKS
+COPY + PASTE + SAVE = TOOLS
+THREE + THREE + ONE = SEVEN
+NINE + LESS + TWO = SEVEN
+ONE + THREE + FOUR = EIGHT
+THREE + THREE + TWO + TWO + ONE = ELEVEN
+SIX + SIX + SIX = NINE + NINE
+SEVEN + SEVEN + SIX = TWENTY
+ONE + ONE + ONE + THREE + THREE + ELEVEN = TWENTY
+EIGHT + EIGHT + TWO + ONE + ONE = TWENTY
+ELEVEN + NINE + FIVE + FIVE = THIRTY
+NINE + SEVEN + SEVEN + SEVEN = THIRTY
+TEN + SEVEN + SEVEN + SEVEN + FOUR + FOUR + ONE = FORTY
+TEN + TEN + NINE + EIGHT + THREE = FORTY
+FOURTEEN + TEN + TEN + SEVEN = FORTYONE
+NINETEEN + THIRTEEN + THREE + TWO + TWO + ONE + ONE + ONE = FORTYTWO
+FORTY + TEN + TEN = SIXTY
+SIXTEEN + TWENTY + TWENTY + TEN + TWO + TWO = SEVENTY
+SIXTEEN + TWELVE + TWELVE + TWELVE + NINE + NINE = SEVENTY
+TWENTY + TWENTY + THIRTY = SEVENTY
+FIFTY + EIGHT + EIGHT + TEN + TWO + TWO = EIGHTY
+FIVE + FIVE + TEN + TEN + TEN + TEN + THIRTY = EIGHTY
+SIXTY + EIGHT + THREE + NINE + TEN = NINETY
+ONE + NINE + TWENTY + THIRTY + THIRTY = NINETY
+\end{verbatim}
+\end{boxprimer}
+
+%DVE KOLONE
+\begin{boxprimer}
+\begin{multicols}{2}
+
+Programiranje ograničenja - primeri:
+\begin{itemize}
+\item Rešiti sistem nejednakosti, npr:
+		\begin{align*}
+			x &\in \{1,...,100\} \\
+			y &\in \{1,...,100\}\\
+			x+y&<100\\
+			x&>10\\
+			y&<50 
+		\end{align*}
+	
+	\columnbreak
+	
+	\item Rasporediti kraljice na šahovskoj tabli
+	\item Rasporediti topove na šahovskoj tabli
+	\item Odrediti položaje za najmanji broj predajnika tako da pokriva određeni prostor
+	\item Definisati ponašanje semafora tako da protok saobraćaja bude najbolji
+\end{itemize}
+
+\end{multicols}
+\end{boxprimer}
+
+\subsection{Podrška za programiranje ograničenja}									% { 6 } [ 2 ]
+
+Podrška za ograničenja su ili ugrađena u programski jezik (npr Oz, Kaleidoscope) ili su data preko neke biblioteke. Postoje različite biblioteke za programiranje ograničenja za jezike C, C++, JAVA, Python, za .NET platformu, Ruby. Neke od biblioteka su IBM ILOG CPLEX, Microsoft Z3. Programiranje ograničenja je često raspoloživo u okviru sistema za logičko programiranje. Programiranje ograničenja u logici -- {\it Constraint logic programing} (CPL).
+
+\begin{description}
+	\item[Koreni programiranja ograničenja] \hfill
+
+	Programiranje ograničenja je nastalo u okviru logičkog programiranja (Prolog II, Jaffar i Lassez, 1987). Logičko programiranje i programiranje ograničenja imaju puno zajedničkih osobina. Većina Prolog implementacija uključuje jednu ili više biblioteka za programiranje ograničenja.\\
+	\begin{tabularx}{\textwidth}{XXXXX}
+	\texttt{B-Prolog} & \texttt{CHIP V5} & \texttt{Ciao} & \texttt{ECLiPSe} & \texttt{SICStus}  \\
+	\texttt{GNU Prolog} & \texttt{Picat} & \texttt{SWI Prolog} & \texttt{...} & \\
+\end{tabularx}
+
+	\item[Neke biblioteke -- links] \hfill
+	
+		\begin{itemize}
+			\item \href{https://www.artelys.com/en/optimization-tools/kalis}
+					{Artelys Lakis (C++, Java, Python)}
+			\item \href{https://constraints.cs.washington.edu/cassowary/}
+					{Cassowary (C++, Java, JavaScript, Ruby, Smalltalk, Python)}
+			\item \href{http://www.cosytec.com/production_scheduling/chip/chip_technology.htm}
+					{CHIP V5 (C++, C)}
+			\item \href{http://choco-solver.org/}
+					{Choco (Java)}
+			\item \href{http://bach.istc.kobe-u.ac.jp/cream/}
+					{Cream (Java)}
+			\item \href{http://research.microsoft.com/apps/pubs/default.aspx?id=64335}
+					{Disolver (C++)}
+			\item \href{http://www.gecode.org/}
+					{Gecode (C++, Python)}
+			\item \href{https://github.com/google/or-tools}
+					{Google or-tools (Python, Java, C++, .NET)}
+			\item \href{http://jacop.osolpro.com/}
+					{JaCoP (Java)}
+			\item \href{http://jopt.sourceforge.net/}
+					{JOpt (Java)}
+			\item \href{http://numberjack.ucc.ie/}
+					{Numberjack (Python)}
+			\item \href{http://constraintmodelling.org/minion/}
+					{Minion (C++)}
+			\item \href{http://labix.org/python-constraint}
+					{\underline{\bf python-constraint (Python)}}
+			\item \href{https://github.com/Z3Prover/z3}
+					{Z3 (C++, Java, Python, C, C\#)}				
+		\end{itemize}
+
+	\item[Direktna podrška za programiranje ograničenja] \hfill
+		\begin{itemize}
+			\item \href{http://www.claire-language.com/}
+					{Claire}
+			\item \href{http://www-ps.informatik.uni-kiel.de/currywiki/}
+					{Curry (zasnovan na Haskell-u)}
+			\item \href{https://constraints.cs.washington.edu/cip/kaleidoscope-asi.html}
+					{Kaleidoscope}
+			\item \href{http://strasheela.sourceforge.net/strasheela/doc/01-Basics.html}
+					{Oz}
+			\item \href{https://www.wolfram.com/language/}
+					{Wolfram language}
+		\end{itemize}
+		
+\end{description}
+
+\subsection{python-constraint}												% { 6 } [ 3 ]
+
+Modul python-constraint podržava programiranje ograničenja na \underline{konačnom domenu}. Programiranje ograničenja nad konačnim domenom sastoji se od tri dela:
+\begin{enumerate}
+	\item Generisanje promenljivih i njihovih domena
+	\item Generisanje ograničenja nad promenljivama
+	\item Obeležavanje ({\it labeling}) -- instanciranje promenljivih
+\end{enumerate}
+U okviru Pythona, rešenja se daju za sve promenljive, tako da je instanciranje podrazumevano.
+
+%DVE KOLONE
+\begin{multicols}{2}
+
+	{\bf Primer 1:} \hfill		%ako se ne stavi hfill onda se preklopi primer i crta
+			% KORISCENJE FRAME BOX-a OKO VERBATIM TEKSTA, NEMA PRELOMA STRANE
+	\begin{boxprimer}
+	\begin{Verbatim}[samepage=true]
+import constraint
+	
+problem = constraint.Problem()
+		
+problem.addVariable("a", [1,2,3])
+problem.addVariable("b", [4,5,6])
+
+resenja = problem.getSolutions()
+
+print resenja
+
+[{'a': 3, 'b': 6}, {'a': 3, 'b': 5}, 
+ {'a': 3, 'b': 4}, {'a': 2, 'b': 6},
+ {'a': 2, 'b': 5}, {'a': 2, 'b': 4},
+ {'a': 1, 'b': 6}, {'a': 1, 'b': 5},
+ {'a': 1, 'b': 4}]
+	\end{Verbatim}
+	\end{boxprimer}
+	
+	\columnbreak
+	
+	{\bf Primer 2:} \hfill
+	\begin{boxprimer}
+	\begin{Verbatim}[samepage=true]
+import constraint
+
+problem = constraint.Problem()
+	
+problem.addVariable("a", [1,2,3])
+problem.addVariable("b", [4,5,6])
+
+def o(a,b):
+	if(2*a>b): return True
+
+problem.addConstraint(o."ab")
+resenja = problem.getSolutions()
+print resenja
+
+[{'a': 3, 'b': 5}, {'a': 3, 'b': 4}]
+		\end{Verbatim}
+	\end{boxprimer}
+\end{multicols}
+
+
+\begin{description}
+	\item[Opšta ograničenja] \hfill
+	
+	\begin{itemize}
+		\item \texttt{AllDifferentConstraint()} -- različite vrednosti svih promenljivih
+		\item \texttt{AllEqualConstraint()} -- iste vrednosti svih promenljivih
+		\item \texttt{constraint. MaxSumConstraint(s [, tezine])} -- suma vrednosti promenljivih (pomnožena sa težinama) ne prelazi s
+		\item \texttt{MinSumConstraint(s [, tezine])} -- suma vrednosti promenljivih (pomnožena sa težinama) nije manja od s
+		\item \texttt{ExactSumConstraint(s [, tezine])} -- suma vrenosti promenljivih (pomnožena sa težinama) je s
+		\item \texttt{InSetConstraint(skup)} -- vrednosti promenljivih koje se nalaze u skupu \texttt{skup}
+		\item \texttt{NotInSetConstraint(skup)} -- vrednosti promenljivih se ne nalaze u skupu \texttt{skup}
+		\item \texttt{SomeInSetContraint(skup)} -- vrednost nekih promenljivih se nalaze u skupu \texttt{skup}
+		\item \texttt{SomeNotInSetConstraint(skup)} -- vrednosti nekih promenljivih se ne nalaze u skupu \texttt{skup}
+	\end{itemize}
+
+	\item[Primer 3: SEND+MORE=MONEY] \hfill
+
+	\begin{boxprimer}
+	\begin{Verbatim}[samepage=true]
+
+	import constraint
+	
+	problem = constraint.Problem()
+	
+	# Definisemo promenljive i njihove vrednosti
+	# prvo S i M (argument je iterable, i sve iz njega je promenljiva)
+	problem.addVariables('SM', range(1,10))
+	problem.addVariables('ENDORY', range(10))
+	
+	# Definisemo ogranicenje za cifre
+	def o(s,e,n,d,m,o,r,y):
+		if(s*1000 + e*100 + n*10 + d + m*1000 + o*100 + r*10 + e) 
+			== (10000*m + 1000*o + 100*n + 10*e + y):
+		return True
+
+	# Dodajemo ograničenja za cifre na svim pozicijama
+	problem.addConstraint(o, "SENDMORY")
+	
+	# Dodajemo ogranicenje da su sve cifre razlicite
+	problem.addConstraint(constraint.AllDifferentConstraint())
+
+	resenja = problem.getSolutions()
+
+	for r in resenja:
+		print "  "+str(r['S'])+str(r['E'])+str(r['N'])+str(r['D'])
+		print " +"+str(r['M'])+str(r['O'])+str(r['R'])+str(r['E'])
+		print "="+str(r['M'])+str(r['O'])+str(r['N'])+str(r['E'])+str(r['Y'])
+	\end{Verbatim}
+	\end{boxprimer}
+	\begin{boxprimer}[width=\linewidth/2]
+	\begin{Verbatim}[samepage= true]
+	Pokretanje:
+	python sendmoremoney.py
+	  9567	
+	 +1085	
+	=10652
+	\end{Verbatim}
+	\end{boxprimer}
+
+	\item[SEND+MORE=MONEY -- Prolog ] \hfill
+	\begin{boxprimer}
+	\begin{Verbatim}[ samepage=true]
+sendmoremoney(Vars) :- Vars = [S,E,N,D,M,O,R,Y], 	%generisanje promenljivih
+	Vars :: 0..9                                     %definisanje domena
+	S #\ 0,                                          %ograničenja
+	M #\ 0,
+	all_different(Vars),
+			 1000*S + 100*E + 10*N + D
+	+		1000*M + 100*O + 10*R + E
+	#=     10000*M + 1000*O + 100*N + 10*E + Y,
+	labeling(Vars).                                  %instanciranje
+\end{Verbatim}
+	\end{boxprimer}
+	
+\end{description}
+
+
+\end{document}

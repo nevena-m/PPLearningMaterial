@@ -1,0 +1,453 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\begin{boxnaslovi}
+\section{Objektno-orijentisano programiranje}
+\end{boxnaslovi}
+
+\subsection{Funkcionalna dekompozicija problema i izmene}
+
+Kreiranje programa u objektno orijentisane programiranju zasniva se na principu {\bf ``Od opšteg ka posebnom''}. Postupak se sastoji u tome da se veliki problem podeli u manje korake koji su potrebni da bi se problem rešio. Za baš velike probleme, podela je u manje potprobleme, pa se onda dekomponuju manji problemi u odgovarajuće funkcionalne korake. Cilj je da se problem deli dok ne dođe do onog nivoa koji je jednostavan i može da se reši u nekoliko koraka, tada se ti koraci poređaju u odgovarajućem redosledu koji rešava identifikovane potprobleme i na taj način je i veliki problem rešen. Ovo je prirodan način razmišljanja, ali postoje dva osnovna problema ovog pristupa:
+\begin{enumerate}
+\item Na ovaj način se kreira program koji je dizajniran na osnovu osobina glavnog programa -- ovaj program kontroliše i zna sve detalje o tome šta će biti izvršeno i koje će se strukture podataka za to koristiti.
+\item Ovakav dizaj ne odgovara dobro na izmene zahteva -- ovi programi nisu dobro podeljeni na celine tako da svaki zahtev za promenom obično zahteva promenu glavnog programa: mala promena u strukturama podataka, na primer, može da ima uticaja kroz ceo program.
+\end{enumerate}
+
+Rešavanje ovog problema orijentisanjem na procese koji se dešavaju da bi se problem rešio ne vodi do programskih struktura koje mogu da lako reaguju na izmene: izmene u razvoju softvera obično uključuju varijacije na postojeće teme. Na primer, razmatrali smo funkcionalnu dekompoziciju problema izračunavanja prosečnog rastojanja između tačaka u ravni:
+\begin{itemize}
+\item Razmatrati prosečno rastojanje tačaka u prostoru.
+\item Razmatrati prosečno rastojanje između nekih drugih objekata.
+\item Razmatrati i druge odnose objekata, ne samo rastojanje.
+\end{itemize}
+U glavnom programu, ovi tipovi izmena povećavaju kompleksnost i zahtevaju puno dodatnih fajlova da se ponovo kompajliraju.\\
+Zašto je uticaj izmena važan?
+\begin{itemize}
+\item Mnoge greške nastaju prilikom izmena koda.
+\item  Stvari se menjaju, uvek se menjaju i ništa ne može da spreči nastajanje izmena i potrebu za prepravljanjem izmena!
+\item Moramo da obezbedimo da postoji dizajn koji će odoleti zahtevima za izmenama, dizajn koji je otporan (fleksibilan) na izmene.
+\item Treba nam dizajn koji je takav da može da se prilagodi promenala na pravi način.
+\end{itemize}
+
+\subsection{Kohezija, kopčanje i efekat talasanja}
+{\bf Kohezija} i {\bf kopčanje} su uvedeni 70-ih godina 20. veka kao metrike koje omogućavaju kvantitativno praćenje kvaliteta koda, sa ciljem da se smanje troškovi održavanja i modifikacije koda.
+\\
+\noindent Kohezija je pojam koji se odnosi na to koliko blisko su povezane operacije koje se vrše u rutini ili modulu. Pojednostavljeno, ono što želimo je da svaka rutina radi samo jednu stvar, ili da se svaki modul odnosi samo na jedan zadatak. Na primer, nije dobro da funkcija radi računanje minimuma, maksimuma i prosečne vrednosti niza istovremeno, bolje je da to rade tri razdvojene funkcije.
+\\
+\noindent Kopčanje se odnosi na jačinu povezanosti dve rutine ili modula. Na primer, nije dobro da jedan modul modifikuje i oslanja se na internu strukturu i rad drugog modula. To je jako kopčanje. Sa jakim kopčanjem, jedna promena u nekoj funkciji ili strukturi podataka uzrokuje potrebu za dodatnim promenama u svim drugim delovima sistema. Kopčanje je pojam komplementaran koheziji, slaba kohezija povlači jako kopčanje i jaka kohezija povlači slabo kopčanje. Želimo jaku kohezivnost i slabo kopčanje. 
+\\
+\indent Potrebe za izmenama u okviru celog koda otežavaju debagovanje i razumevanje zadataka koje sistem obavlja. Napravimo izmenu, a neočekivano nešto drugo u sistemu ne funkcioniše, to je neželjeni propratni {\bf efekat talasanja}. Ukoliko imamo kod sa jakim kopčanjem, otkrivamo da mnogi delovi sistema zavise od koda koji je izmenjen -- treba vremena da se otkriju i razumeju ti odnosi.
+
+\subsection{Nastanak OOP}
+
+Razvoj softvera se suočavao sa velikim brojem problema. Simptomi softverske krize:
+\begin{itemize}[]
+\item kasne isporuke
+\item probijanje rokova i budžeta
+\item loš kvalitet
+\item nezadovoljivanje potreba
+\item slaba pouzdanost
+\item nepostojanje metodologije u razvoju softvera
+\end{itemize}
+Cena softvera se značajno povećala, održavanje i razvoj softvera je nadmašilo troškove hardvera. OOP je nastala kao jedna od posledica softverske krize. Kompleksnost softvera zahtevala je promene u stilu programiranja. Cilj je bio da se:
+\begin{itemize}
+\item proizvodi pouzdan softver
+\item smanji cena proizvodnje softvera
+\item razvijaju ponovo upotrebljivi moduli
+\item smanje troškovi održavanja
+\item smanji vreme razvoja softvera
+\end{itemize}
+OOP uvodi novi način razmišljanja za pronalaženje rešenja problema.
+
+\begin{boxprimer}[breakable]
+Studenti nakon predavanja idu na naredno predavanje. Funkcionalna dekompozicija problema:\\
+Nastavnik je glavni program koji rešava problem:
+\begin{itemize}
+\item za svakog studenta nastavnik pronalazi kojoj grupi pripada
+\item u rasporedu časova nastavnik pronalazi koji čas data grupa treba da ima
+\item nastavnik svakom studentu kaže gde treba da ide i šta treba da sluša
+\end{itemize}
+Da li se tako rešava problem u stvarnom životu?
+OO pristup:
+\begin{itemize}
+\item nastavnik podrazumeva da svaki student zna raspored časova i kojoj grupi pripada, tako da sam zna gde treba da ide
+\item u najgorem slučaju, nastavnik može svima da saopšti gde mogu da nađu raspored časova i podelu po grupama i da kaže: koristite ove informacije da odredite lokaciju sledećeg predavanja.
+\end{itemize}
+Razlika između pristupa:
+\begin{description}
+\item[Prvi pristup] \hfill
+	\begin{itemize}
+	\item Nastavnik zna sve i za sve je odgovoran, ukoliko dođe do nekih promena, na njemu je odgovornost da te promene izvede.
+	\item Nastavnik mora da daje detaljna uputstva svakom studentu (entitetu u sistemu)
+	\end{itemize}
+\item[Drugi pristup] \hfill
+	\begin{itemize}
+	\item  Nastavnik očekuje da su studenti (entiteti u sistemu) sposobni da sami reše problem (da su samodovoljni).
+	\item Nastavnik daje samo opšte instrukcije i očekuje od studenata da znaju da ih primene u svojim specifičnim situacijama.
+	\end{itemize}
+\end{description}
+
+Osnovna prednost drugog pristupa je u {\bf podeli odgovornosti} -- svaki deo sistema ima svoju odgovornost i odgovornost se prebacuje sa glavnog programa na entitete u sistemu.
+Pretpostavimo da u okviru grupe postoje i studenti volonteri koji između predavanja treba da urade nešto specijalno. U prvom sučaju nastavnik bi morao da zna da oni postoje i šta je to što oni treba da urade, dok u drugom nastavnik samo završava čas i kaže svima da idu na naredno predavanje, a svaki student zna šta treba, studenti volonteri sami znaju koje su njihove obaveze. Dodavanje novih vrsta obaveza i entiteta u sistemu ne remeti nastavnika (glavni program).
+
+\end{boxprimer}
+
+Prethodni primer ilustruje osnovne benefite OOP:
+\begin{itemize}
+\item Samodovoljni entiteti - objekti
+\item Davanje opštih instrukcija - kodiranje interfejsa
+\item Očekivanje da entiteti umeju da prime opšte instrukcije na njihove specifične situacije - polimorfizam i podklase
+\item Dodavanje novih entiteta u sistem bez uticaja na vođu sesije - kodiranje interfejsa, polimorfizam, podklase
+\item Prebacivanje odgovornosti - funkcionalnost je podeljena kroz mrežu objekata u sistemu
+\end{itemize}
+
+\subsection{Poređenje strukturne i OO paradigme}
+
+{ \renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|X||>{\columncolor[gray]{0.9}}X|}
+\hline
+\makecell{{\bf Strukturno programiranje} }
+	& \makecell{{\bf Objektno-orijentisano programiranje} }\\
+\hline 
+\hline
+Primenjuje se top-down pristup 
+	& Primenjuje se bottom-up pristup \\
+Akcenat je algoritmima i kontroli toka 
+	& Akcenat je na objektnom modelu \\
+Program je podeljen na nekoliko potprograma, ili funkcija, ili procedura
+	& Program je organizovan kroz nekoliko klasa i objekata \\
+Funkcije su nezavisne jedne od drugih
+	& Sve klase su u hijerarhijskom odnosu \\
+Nema određenog primaoca u pozivu funkcije
+	& Postoji određen primalac za svaku prosleđenu poruku \\
+Podaci i funkcije se posmatraju kao dva odvojena entiteta
+	& Podaci i funkcije su jedan jedini entitet \\
+Skupo odrzavanje
+	&  Održavanje je relativno jeftinije \\
+Softver se ne može koristiti za nešto drugo
+	& Pomaže pri korišćenju softvera za druge probleme \\
+Koriste se pozivi funkcija
+	& Koristi se prosleđivanje poruka \\
+Koriste se apstrakcije funkcija
+	& Koristi se apstrakcija podataka \\
+Prednost se daje algoritmima
+	& Prednost se daje podacima \\
+Rešenje je usko povezano sa domenom rešenja
+	& Resenje je povezano sa domenom problema koji se rešava\\
+Nema enkapsulacije. Podaci i funkcije su razdvojeni
+	& \makecell[l]{Ekapsulacija paketa koda i podataka sveukupno. \\Podaci i funkcionalnosti se stavljaju u jedan entitet} \\
+Odnos između programera i programa je naglašena
+	& Odnos između programera i korisnika je naglašena \\
+Koristi se tehnika koja zavisi od podataka.
+	& Podstaknuta je raspodela obaveza\\
+\hline
+\end{tabularx}
+}
+\vspace{0.3cm}\\
+Osnovne prednosti OOP u odnosu na strukturnu paradigmu je lakše održavanje, lakša ponovna upotrebljivost koda i veća skalabilnost.
+
+\subsection{Apstrakcija, interfejs, implementacija, enkapsulacija}
+{\bf Apstrakcija} je skup osnovnih koncepata koje neki entitet obezbeđuje sa ciljem omogućavanja rešavanja nekog problema. Ona uključuje atribute koji oslikavaju osobine entiteta kao i operacije koje oslikavaju ponašanje entiteta. Daje neophodne i dovoljne opise entiteta, a ne i njihove implementacione detalje. Apstrakcija rezultuje u odvajanju interfejsa i implementacije. 
+\\
+Veoma je važno znati razliku između interfejsa i implementacije. {\bf Interfejs} je korisnički pogled na to šta neki entitet može da uradi, dok {\bf implementacija} vodi računa o internim operacijama interfejsa koji ne moraju da budu poznati korisniku. Interfejs govori ŠTA entitet može da uradi, dok implementacija govori KAKO entitet interno radi.
+
+{ \renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|l||>{\columncolor[gray]{0.9}}X|}
+\hline
+{\bf Intefejs} &{\bf Implementacija}  \\
+\hline 
+\hline
+Korisnički pogled. ({\bf Šta}) & Pogled dobavljača. ({\bf Kako}) \\
+Koristi se za interakciju sa spoljašnjim svetom.& Opisuje kako se poverena odgovornost izrvršava. \\
+Korisniku je odobren samo pristup interfejsu.& Funkcije i metodi imaju dozvolu da pristupaju podacima. Prema tome, dobavljač je u stanju da pristupi podacima i interfejsu. \\
+Enkapsulira znanje o objektu.& Pruža ograničenje korisniku da pristupa podacima. \\
+\hline
+\end{tabularx}
+}
+\vspace{0.3cm}\\
+{\bf Enkapsulacija} (učaurivanje) je skup mehanizama koje obezbeđuje jezik (ili skup tehnika za dizajn) za skrivanje implementacionih detalja (klase, modula ili podsistema od ostalih klasa, modula i podsistema). Enkapsulacijom su podaci zaštićeni od neželjenih spoljnih uticaja. Na primer, u većini OO programskih jezika, označavanje privatne promenljive u okviru klase obezbeđuje da druge klase ne mogu da pristupe toj vrednosti direktno, već isključivo putem metoda za pristup i izmenu, ukoliko ih klasa obezbedi. Ovo se naziva {\bf skrivanje podataka}. Enkapsulacija je širi pojam od skrivanja podataka. 
+\\
+Sa korisničkog stanovišta, entitet nudi izvestan broj usluga preko interfejsa i skriva implementacione detalje -- termin enkapsulacija se koristi za skrivanje implementacionih detalja. Prednosti enkapsulacije su skrivanje informacija i implementaciona nezavisnost (promena implementacije može da se uradi bez promene interfejsa). Primer: klasa kompleksan broj.
+\\
+Problemi adaptacije na izmene postoje kod funkcionalne dekompozicije problema jer rezultujući softver ima slabo korišćenje apstrakcija i slabu enkapsulaciju. Kada postoji slaba apstrakcija, a želimo da dodamo novu, onda nije jasno kako to treba da uradimo. Kada je loša enkapsulacija izmene imaju tendenciju da se prostiru kroz ceo kod jer ništa ne sprečava formiranje zavisnosti između delova koda.
+
+\subsection{Objekti i klase}
+
+{\bf Objekat}
+\begin{description}
+\item[Filozofski:] Entitet koji se može prepoznati.
+\item[Konceptualno:] Skup odgovornosti.
+\item[U termimima objektne terminologije:] Apstrakcija entiteta iz stvarnog sveta.
+\item[Specifikacijski:] Skup metoda.
+\item[Implementaciono:] Podaci sa odgovarajućim funkcijama
+\end{description}
+
+Objekti imaju svoje {\it ponašanje} (operacije) i {\it osobine} (atribute). Kako se određuje koje ponašanje i koje osobine su relevantne za neki objekat? Pre svega, kako se  određuju potrebni objekti? (Objekti imaju svoje odgovornosti!) 
+\\
+Zadatak OO analize i dizajna: u okviru analize treba da se sagleda šta je problem, koje su odgovornosti koje sistem treba da ostvari i u tome se pronalaze kandidati za potrebne objekte. Domen problema takođe sugeriše koji su objekti u sistemu potrebni. 
+\\
+Objekti mogu da sadrže druge objekte ({\bf agregacija objekata}). Objekti međusobno komuniciraju slanjem poruka. Poruke su komande koje se šalju objektu sa ciljem da izvrši neku akciju. Poruke se sastoje od objekta koji prima poruku, metoda koji treba da se izvrši i argumenata (opciono). Npr: Panel1.Add(Button1) -- primalac je Panel1, metod je Add, a argument je Button1.
+\\
+U svetu postoji previše objekata i oni se klasifikuju u kategorije, ili u {\bf klase}. Klase su šabloni za grupe objekata. Daju specifikaciju za sve podatke i ponašanja objekata. Za objekat kažemo da je {\bf instanca} klase. Postoje različiti odnosi između klasa, osnovni su {\bf nasleđivanje} i {\bf agregacija}.
+\\
+\begin{tikzpicture}[-latex,
+kvadrat/.style={shape=rectangle, draw, minimum width = 1.8cm}]
+
+\node (rw) at (0,0) {Real World};
+\node[right = of rw] (abst) {Abstraction};
+\node[right = of abst] (oop) {\makecell{Object Oriented Programming \\ CLASS}};
+
+\draw[-] (rw.north east) -- +(0,-4);
+\draw[-] (abst.north east) ++(1,0) -- +(0,-4);
+
+\node[kvadrat, minimum width = 1.5cm, below =of rw, yshift=-5mm](e) {Entity};
+\draw[-] (abst) +(0,-2) circle (1.5cm);
+\node[kvadrat, below =of abst] (ppts) {Properties};
+\node[kvadrat, below =of abst, yshift=-1cm] (oprs) {Operations};
+
+\draw[-] (oop) +(0,-2) circle (1.5cm);
+\node[kvadrat, below =of oop, yshift=0.4cm] (data) {Data};
+\node[kvadrat, below =of oop, yshift=-0.6cm] (func) {Functions};
+
+\draw (e.east) -- (ppts.west);
+\draw (e.east) -- (oprs.west);
+\draw (ppts.east) -- (data.west);
+\draw (oprs.east) -- (func.west);
+\end{tikzpicture}
+\\
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|l|>{\columncolor[gray]{0.9}}X|}
+\hline
+{\bf Klasa} & {\bf Objekat} \\
+\hline
+Klasa je tip podataka.
+	& Objekat je instanca klasnog tipa podataka.\\
+Ona generiše objekat.
+	& Daje život klasi.\\ 
+Ona je prototip objekta.
+	& Predstavlja skladište za svoje karakteristike. \\
+Ne zauzima memorijsku lokaciju.
+	& Zauzima lokaciju u memoriji. \\
+Ne može se manipulisati njom jer nije dostupna u memoriji.
+	& Može se manipulisati njime. \\
+\hline
+\end{tabularx}
+}
+\vspace{3mm}\\
+Klase definišu kreiranje i uništavanje objekata -- metodi konstruktori i dekonstruktori. Konstruktori obezbeđuju da se objekti ispravno inicijalizuju. Dekonstruktori obezbeđuju da objekat oslobodi sve resurse koje je zauzimao dok je bio aktivan.
+\\
+Apstrakcija vođena podacima je osnovni koncept objektnih pristupa. U zavisnosti od prisutnosti ostalih koncepata, jezik može da bude {\bf objektno-zasnovan} ili {\bf objektno-orijentisan}. Objektno-zasnovan jezik podržava enkapsulaciju i identitet objekta (jedinstvene osobine koje ga razdvajaju od ostalih objekata) i nema podršku za polimorfizam, nasleđivanje, komunikaciju porukama iako takve stvari mogu da se emuliraju. Objektno-orijentisani jezici imaju sve osobine objektno-zasnovanih jezika, zajedno sa nasleđivanjem i polimorfizmom.
+
+\subsection{Nasleđivanje, polimorfizam}
+Nasleđivanje je kreiranje novih klasa (izvedenih klasa) od postojećih klasa (osnovnih ili baznih klasa). Kreiranje novih klasa omogućava postojanje hijerarhije klasa koje simuliraju koncept klasa i potklasa iz stvarnog sveta. Primer: životinja, sisar, mačka, pas, riba, štuka, som, \ldots. Primer: vozilo, kopneno, vazdušno, vodeno, automobil, kamion, brod, čamac, avion, jedrilica, \ldots. Nasleđivanje omogućava proširivanje i ponovno korišćenje postojećeg koda, bez ponavljanja i ponovnog pisanja koda. Bazne klase se mogu koristiti puno puta.
+\\
+Nasleđivanje je korisno za {\bf proširivanje} i {\bf specijalizaciju}. Proširivanje koristi nasleđivanje da se razviju klase od postojećih dodavanjem novih osobina. Na primer, u okviru stambene zdrade može postojati deo za poslovni prostor, pa je klasu \texttt{StambenaZgrada} potrebno proširiti tako da može da prati i poslovni prostor. Specijalizacija koristi nasleđivanje da se preciznije definiše ponašanje opšte (apstraktne) klase. Podklase obezbeđuju specijalizovano ponašanje na osnovu zajedničkih elemenata koje obezbeđuje bazna klasa. Na primer, bazna klasa može da bude student, a podklase koje obezbeđuju specijalizovano ponašanje su klase \texttt{StudentOsnovnihStudija}, \texttt{StudentMasterStudija} i \texttt{StudentDoktorskihStudija}.
+\\
+Prilikom nasleđivanja, podklasa može da doda nova ponašanja i nove podatke koji su za nju specifični, ali takođe može i da promeni ponašanje koje je nasledila od bazne klase kako bi njene specifičnosti bile uzete u obzir (polimorfizam). Poželjno je da svaka osobina koja važi za baznu klasu važi i za njenu podklasu, ali obrnuto ne mora da važi (npr, svaki pas ima sve osobine životinje, ali svaka životinja ne mora da ima sve osobine psa). Potklase se mogu tretirati kao bazne klase, jer sadrže sve atribute i metode kao i bazne klase tako da kod koji je razvijen za rad sa baznim klasama, može da se primeni i na podklase.
+
+\begin{boxprimer}
+Problem: imamo različite klase studenata (osnovne, master i doktorske studije) i treba da napravimo leksikografski sortiran spisak studenata.\\
+Rešenje: ukoliko su sve tri klase studenata podklase bazne klase Student, onda se svi studenti mogu staviti u istu kolekciju (npr u niz ili listu) i mogu se tretirati na isti način, bez obzira na njihove raznorodne specifičnosti. Ne samo što možemo sve studente da stavimo u istu kolekciju, već ih možemo tretirati na isti način, pri čemu će se svaki student ponašati u skladu sa svojim specifičnostima (polimorfizam).
+\end{boxprimer}
+
+Klase definišu vidljivost osobina svojim objektima: atribut ili metod može da bude javan, zaštićen ili privatan. Javna vidljivost omogućava svima da pristupe atributu ili metodu. Zaštićena vidljivost omogućava pristup samo podklasama date klase, dok privatna vidljivost omogućava pristup samo u okviru same klase. U jeziku JAVA zaštićena vidljivost je moguća samo između klasa koje nisu u istom paketu.
+
+\begin{figure}[h]
+\begin{boxprimer}
+
+Objekat A je instance klase X.\\
+Objekat B je instanca klase Y koja je potklasa klase X.\\
+Objekat C je instanca klase Z koja je nezavisna od klasa X i Y.\\
+\\
+\begin{tikzpicture}[-open triangle 60,
+every node/.style={shape=rectangle, draw, minimum height=1cm, minimum width=1.5cm}]
+\node (x) at (0,0) {X};
+\node[below = of x] (y) {Y}
+	edge (x.south);
+\node[right = of x] (z) {Z};
+
+\draw[-,line width=3pt] (z.north east) ++(1,0.2) -- +(0, -3.5);
+
+\node[right =of z, xshift = 1cm] (a) {A:X};
+\node[right= of a] {B:X};
+\node[below right = of a] {C:Z}; 
+
+\end{tikzpicture}
+\\
+Javna vidljivost karakteristika klase X znači da A, B i C mogu da im pristupe.\\
+Zaštićena vidljivost karakteristika klase X znači da A i B mogu da im pristupe, ali da C ne može.\\
+Privatna vidljivost karakteristika klase X znači da samo A može da im pristupi.
+\end{boxprimer}
+\end{figure}
+Ovo su, naravno, opšte definicije, različiti jezici implementiraju vidljivost na različite načine.
+\\
+Klasa može da se izvede kroz nasleđivanje iz više od jedne osnovne klase -- {\bf višestruko nasleđivanje}. Instance klase koja koristi višestruko nasleđivanje imaju osobi koje nasleđuju od svake bazne klase. Višestruko nasleđivanje ima očigledne prednosti, ali ima i mane (kompleksnost, uvođenje virtuelnog nasleđivanja, teže debagovanje). Podržano je u C++-u. Java ne podržava višestruko nasleđivanje, ali podržava implementiranje interfejsa, što do neke mere liči na višestruko nasleđivanje.
+\\
+Polimorfizam -- puno formi -- različita ponašanja. U okviru objektne terminologije, najčešće se odnosi na tretiranje objekata kao da su objekti bazne klase ali od njih dobijati ponašanje koje odgovara njihovim specifičnim potklasama. U ovom slučaju, polimorfizam se odnosi na kasno vezivanje poziva za jednu od više različitih implementacija metoda u hijerarhiji nasleđivanja.
+\\
+Treba razlikovati pojmove {\bf preopterećivanja} i {\bf predefinisanja}. 
+\\
+Preopterećivanje (eng. {\it overloading}) -- isto ime ili operator može da bude pridružen različitim operacijama, u zavisnosti od tipa podataka koji mu se proslede. Na primer \texttt{int f()\{\ ldots \}} i \texttt{int f(int x) \{ \ldots \}}. 
+\\
+Predefinisanje (eng. {\it overriding}) -- mogućnost različitih objekata da odgovore na iste poruke na različiti način. Ukoliko u baznoj i izvedenoj klasi imamo metod koji ima isti potpis, onda kažemo da je izvedena klasa zapravo predefinisala metod iz bazne klase.
+\\
+Statičko vezivanje je ``odlučivanje '' koja će metoda biti pozvana u vreme prevođenja. Pretpostavimo da postoje dve metode sa istim imenom u istoj klasi koje se razlikuju po broju i/ili tipu argumenata -- odluka o tome koja će od ove dve metode biti pozvana može se doneti u fazi prevođenja i to tako što se izvrši poređenje tipova argumenata, a ukoliko postoji dvosmislenost onda prevodilac javlja grešku. Ako ne postoji metod sa datim imenom u izvedenoj klasi onda se on traži u baznoj klasi. Preopterećivanje se odlučuje statički.
+\\
+Dinamičko vezivanje je ``odlučivanje'' koja će metoda biti pozvana u vreme izvršavanja programa.
+\begin{boxprimer}
+Ako imamo baznu klasu \texttt{Zivotinja} i ako iz nje izvedemo klasu \texttt{Macka}, klasu \texttt{Pas} i klasu \texttt{Konj}, tada na primer možemo formirati niz pokazivača na klasu \texttt{Zivotinja} kojima u zavisnosti od situacije možemo dodeliti da pokazuju na različite \texttt{Macke}, \texttt{Pse}, \texttt{Konje}. Ako su izvedene klase predefinisale neku metodu \texttt{f} klase \texttt{Zivotinja}, želimo da pozivom te metode uz pomoć pokazivača na \texttt{Zivotinju} bude pozvana odgovarajuća predefinisana metoda i to iz klase \texttt{Macka} ukoliko pokazivač pokazuje na \texttt{Macku}, iz klase \texttt{Pas} ukoliko pokazivač pokazuje na \texttt{Psa} i analogno za klasu \texttt{Konj}.
+\end{boxprimer}
+Da bi se koristilo dinamičko vezivanje, potrebno je koristiti odgovarajuće mehanizme jezika (virtuelne metode). Cena dinamičkog vezivanja je kreiranje tabela {\bf virtuelnih funkcija}. Za svaki objekat kompajler implicitno dodaje pokazivač na tabelu virtuelnih funkcija. Na osnovu te tabele određuje se u fazi izvršavanja koja će tačno metoda biti pozvana. 
+
+
+{\bf Apstraktne klase} definišu ponašanja koja su relevantna za sve podklase. One definisu potpise metoda koje podklase treba da implementiraju, definišu metode ponašanja koja su zajednička i definišu podatke koji su zajednički i korisni za sve podklase. One ne mogu da se instanciraju -- instanciraju se konkretne klase, dok se pristupa preko interfejsa definisanog od strane apstraktne klase.
+
+
+{\bf Šabloni} omogućavaju prevazilaženje ograničenja strogo tipiziranih jezika ({\it templates} -- C++). Stroga tipiziranost ima kao posledicu da se i jednostavne funkcije moraju definisati više puta da bi se mogle upotrebljavati na raznim tipovima. Na primer, funkcija koja računa minimum dva prirodna broja, dva realna, dva razlomka, dva kompleksna, \ldots -- za ovo se koriste šabloni funkcija. Mehanizam šablona omogućava i automatsko generisanje klasnih tipova. Primer: niz, lista, skup, sortiranje, \ldots Definicija šablona klase određuje kako se konstruišu pojedine klase kada je dat skup od jednog ili više stvarnih tipova ili vrednosti. {\bf Generičko programiranje} omogućava višestruko korišćenje softvera. 
+\\
+Implicitni polimorfizam -- uopštenje parametarskog, prisutno na primer u funkcionalnim programskim jezicima.\\
+
+\subsection{OO jezici i njihove osobine}
+
+\begin{figure}[h]
+{ \renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|l||>{\columncolor[gray]{0.9}}l|X|}
+\hline
+{\bf Jezik} &{\bf Pronalazač  i godina}  &{\bf Organizacija}\\
+\hline 
+\hline
+Simula & Kristen Nygaard, Ole-Johan Dahl, 1960. & Norwegian Defens Research Establishment, Norway\\
+Ada& Jean Ichbiah, 1970. & Honeywell-CII-Bull, France \\
+Smalltalk& Alan Kay, 1970. & Xerox PARC, USA \\
+C++& Bjarne Stroustrup, 1980. & AT\&T Bell Labs, USA \\
+Objective C&Brad Cox, 1980. & Stepstone, USA \\
+Object Pascal&Larry Tesler, 1985. & Apple Computer, USA \\
+Eiffel& Bertrand Meyer, 1992. & Eiffel Software, USA \\
+Java&James Gosling, 1996. & Sun Microsystems, USA \\
+C\#&Andres Hejlsberg, 2000. & Microsoft, USA \\
+\hline
+\end{tabularx}
+}
+\caption{OO jezici i njihove osobine}
+\end{figure}
+
+Većina OO jezika je veoma slično imperativnoj paradigmi, ali je promenjen način razmišljanja o problemu.
+OOP pomera fokus sa algoritama na podatke. Zasniva se na modelovanju objekata iz stvarnog sveta. Osnovna jedinica {\bf apstrakcije} je {\bf objekat} koji {\bf enkapsulira} podatke i ponašanje.
+
+\begin{figure}[h]
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{% 9 kolona, svaka druga obojena
+| l |>{\columncolor[gray]{0.9}}X | X |>{\columncolor[gray]{0.9}}X | X |>{\columncolor[gray]{0.9}}X| X | >{\columncolor[gray]{0.9}}X|X|}
+\hline
+{\bf Feature } & {\bf  Java} & {\bf C++} & {\bf Smalltalk} & {\bf Objective C} & {\bf Simula} & {\bf Ada} & {\bf Eiffel} & {\bf C\#}\\
+\hline \hline
+Encapsulation
+& \cmark
+&  \cmark
+& Poor
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+\\
+Single inheritance
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \xmark
+& \cmark
+& \cmark
+\\
+Multiple inheritance
+&\xmark
+& \cmark
+&\xmark
+& \cmark
+&\xmark
+&\xmark
+& \cmark
+&\xmark
+\\
+Polymorphism
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+\\
+Binding (Late, Early)
+& Late
+& both
+& Late
+& both
+& both 
+& Early
+& Early
+& Late
+\\
+Concurrency
+& \cmark
+& Poor
+&Poor
+&Poor
+& \cmark
+& Difficult
+& \cmark
+& \cmark
+\\
+Garbage collection
+& \cmark
+&\xmark
+& \cmark
+& \cmark
+& \cmark
+&\xmark
+& \cmark
+& \cmark
+\\
+Persistent objects
+&\xmark
+&\xmark
+&promised
+&\xmark
+&\xmark
+&like 3GL
+&limited
+&\xmark
+\\
+Genericity
+& \cmark
+& \cmark
+&\xmark
+&\xmark
+&\xmark
+& \cmark
+& \cmark
+& \cmark
+\\
+Class libraries
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& \cmark
+& limited
+& \cmark
+& \cmark
+\\
+\hline
+\end{tabularx}
+}
+\caption{OO jezici i njihove osobine}
+\end{figure}
+
+Vezivanje se odnosi na određivanje tipova promenljivih -- Late je dinamičko (u fazi izvršavanja), Early je statičko (u fazi prevođenja).
+
+
+\end{document}

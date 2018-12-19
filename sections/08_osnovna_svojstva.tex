@@ -1,0 +1,355 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\pagebreak
+\begin{boxnaslovi}
+\section{Osnovna svojstva programskih jezika}
+\end{boxnaslovi}
+
+\subsection{Uvod}
+
+\begin{itemize}
+\item Šta je ono što dva programska jezika čini sličnim?
+\item Na osnovu čega neki jezik pripada nekoj paradigmi?
+\item Šta je ono što dva programska jezika čini različitim?
+\item Na osnovu čega neki jezik ne pripada nekoj paradigmi?
+\item Šta je zajedničko za sve programske jezike?
+\item Šta je ono što je specifično za svaki programski jezik?
+\item Šta je ono što je specifično za neki programski jezik?
+\end{itemize}
+Postoje različita svojstva programskih jezika koja ćemo izučiti: sintaksa, semantika, imena, doseg, povezanost, kontrola toka, podrutine, tipovi, kompajlirani/interpretirani jezici, izvršavanje.
+
+\subsection{Leksika, sintaksa, semantika}
+Programski jezici moraju da budu precizni. Leksika je podoblast sintakse koja se bavi opisivanjem osnovnih gradivnih elemenata jezika. U okviru leksike, definišu se reči i njihove kategorije. U programskom jeziku, reči se nazivaju {\it lekseme}, a kategorije {\it tokeni}. U prirodnom jeziku, kategorije su imenice, glagoli, pridevi,\ldots  U programskom jeziku, tokeni mogu da budu identifikatori, ključne reči, operatori, \ldots
+
+\begin{boxprimer}
+\texttt{a=2*b+1} -- Lekseme su \texttt{a}, \texttt{=}, \texttt{2}, \texttt{*}, \texttt{+}, \texttt{1} i \texttt{b}, a njima odgovarajući tokeni su identifikator (\texttt{a}, \texttt{b}), operator (\texttt{=}, \texttt{*}, \texttt{+}), celobrojni literali (\texttt{1}, \texttt{2}). 
+\end{boxprimer}
+
+Neki tokeni sadrže samo jednu reč, a neki mogu sadržati puno različitih reči. Programski jezik C sadrži više od 100 različitih tokena: 44 različite ključne reči, identifikatore, celobrojne konstante, realne vrednosti, karakterske konstante, stringovske literale, dve vrste komentara, 54 operatora, \ldots
+Drugi moderni programski jezici (npr Ada, Java) imaju sličan nivo kompleksnosti tokena.
+\\
+Razlikujemo ključne reči i identifikatore: identifikator ne može biti neka od ključnih reči, npr ne možemo da napravimo promenljivu koja bi se zvala if ili while. Postoje ključne reči koje zavise od konteksta, eng. {\it contextual keywords} koje su ključne reči na određenim specifičnim mestima programa, ali mogu biti identifikatori na drugim mestima. Na primer, u C\#-u reč \texttt{yield} može da se pojavi ispred break ili return, na mestima na kojim identifikator ne može da se pojavi. Na tim mestima, ona se interpretira kao ključna reč, ali može da se koristi na drugim mestima i kao identifikator. C\# 4.0 ima 26 takvih konteksno zavisnih ključnih reči, C++ 11 ih takođe ima dosta. Većina je uvedena revizijom postojećeg jezika sa ciljem da se definiše novi standard: sa velikim brojem korisnika i napisanog koda, vrlo je verovatno da se neka reč već koristi kao identifikator u nekom postojećem programu. Uvođenjem kontekstualne ključne reči, umesto obične ključne reči, smanjuje se rizik da se postojeći program neće kompilirati sa novom verzijom standarda. Reči se obično definišu regularnim izrazima. Na primer, \texttt{[a-zA-Z\_][a-zA-Z\_0-9]*}. Regularnim izrazima se definišu reči, dok se konačnim automatima prepoznavaju ispravne reči. Generisanje je bitno programerima, a prepoznavanje kompajlerima. Leksikom programa obično se bavi deo prevodioca koji se naziva leksički analizator: on dodeljuje ulaznim rečima odgovarajuće kategorije, što je bitno za dalji proces prevođenja.
+
+
+Sintaksa programskog jezika definiše strukturu izraza, odnosno načine kombinovanja osnovnih elemenata jezika u ispravne jezičke konstrukcije. Formalno, sintakse se opisuju kontekstno slobodnim gramatikama, a prepoznavaju parserima (potisni automat). 
+
+\begin{boxprimer}
+Sledeća jednostavna gramatika definiše jednostavne aritmetičke izraze:
+\begin{Verbatim}
+<exp> ::= <exp>''+'' <exp>
+<exp> ::= <exp> ''*'' <exp>
+<exp> ::= ''('' <exp> ''<exp>''
+<exp> ::= ''a''
+<exp> ::= ''b''
+<exp> ::= ''c''
+\end{Verbatim}
+Program u ovom jeziku je proizvod ili suma od 'a', 'b', 'c', na primer ispravan izraz je \texttt{a*(b+c)}.
+\end{boxprimer}
+
+Neformalno govoreći, semantika pridružuje značenje ispravnim konstrukcijama na nekom programskom jeziku. Semantika programskog jezika određuje značenje jezika. Obično je značajno teže definisati nego sintaksu. Uloga semantike je da programer može da razume kako se program izvršava pre njegovog pokretanja. Semantika može da se opiše formalno i neformalno, često se zadaje samo neformalno. Na primer, semantika naredbe \texttt{if(a<b) a++;} neformalno se opisuje sa ``ukoliko je vrednost promenljive 
+\texttt{a} manja od vrednosti promenljive \texttt{b}, onda uvećaj vrednost promenljive \texttt{a} za jedan''.
+\\
+Formalna semantika omogućava formalno rezonovanje o svojstvima programa. Na primer, formalna semantika nekog jezika, zajedno sa modelom programa (tranzicionim sistemom) omogućava ispitivanje različitih uslova ispravnosti/korektnosti tog programa. Različitim programskim jezicima prirodno odgovaraju različite semantike.
+Formalni opis značenja jezičkih konstrukcija: 
+\begin{itemize}
+\item Operaciona semantika
+\item Aksiomska semantika
+\item Denotaciona semantika
+\end{itemize}
+
+{\bf Operaciona semantika} \hfill
+
+	Opisuje kako se izračunavanje izvršava. Ponašanje se formalno definiše korišćenjem apstraktnih mašina, formalnih automata, tranzicionih sistema\ldots U okviru ove semantike postoje {\color{red} strukturna operaciona semantika} ({\it small-step semantics}, opisuje individualne korake izračunavanja) i {\color{red}prirodna operaciona semantika} ({\it big-step semantics}, opisuje ukupne rezultate izračunavanja). Najčešće se koristi za opis i rezonovanje o imperativnim jezicima jer individualni koraci izračunavanja opisuju na koji način se menja stanje programa.
+
+{\bf Denotaciona semantika} \\
+	Definiše značenje prevođenjem u drugi jezik, za koji se pretpostavlja da je poznata semantika. Najčešće je taj drugi jezik nekakav matematički formalizam. Povezivanje svakog dela programskog jezika sa nekim matematičkim objektom kao što je to broj ili funkcija: svaka sintaksna definicija se tretira kao objekat na koji se može primeniti funkcija koja taj objekat preslikava u matematički objekat koji definiše značenje. Dodeljivanjem značenja delovima programa dodeljuje se značenje celokupnom programu, tj. semantika jedne programske celine definisana je preko semantike njenih poddelova. Ova osobina denotacione semantike naziva se {\bf kompozitivnost}. 
+
+\begin{boxprimer}[breakable]
+\indent {\bf Primer operacione sematike - Prirodna semantika:}
+\[ \big \langle S, s \big \rangle  \rightarrow s'\]
+Intuitivno ovo znači da će se izvršavanje programa $S$ sa ulaznim stanjem $s$ završiti i rezultujuće stanje će biti $s'$. {\bf Pravilo} generalno ima formu
+\[ \frac{ \big \langle S_1,\ s_1 \big \rangle \rightarrow s_1', \ldots,\ \big \langle S_n,\ s_n \big \rangle \rightarrow s_n' }{ \big \langle S, s \big \rangle \rightarrow s'} \]
+gde $S_1, \ldots, S_n$ nazivamo neposrednim konstituentima (eng. {\it immediate constituents}) od $S$. Pravilo se sastoji iz određenog broja {\it premisa} (nalaze se iznad linije) i jednog {\it zaključka} (nalazi se ispod linije). Pravilo takođe može imati određen broj {\it uslova} (nalaze se sa desne strane linije) koji moraju biti ispunjeni kako bi se pravilo primenilo. Pravilo sa praznim skupom premisa naziva se {\it aksioma}.
+\\
+\indent {\bf Primer prirodne semantike:}\\
+$\mathcal{B}-$semantika bulovskog izraza, $\mathcal{A}-$semantika aritmetičkog izraza
+\\
+\[(z:=x, x:=y); y:=z\]
+Neka $s_0$ bude stanje koje mapira sve promenljive osim $x$ i $y$ u 0 i ima $x=5$ i $y=7$. Tada dobijamo sledeće stablo izvođenja:
+\[ \frac{\frac{
+	 \big \langle z:=x,\ s_0 \big \rangle \rightarrow s_1  \hspace{5mm}  
+	\big \langle x:=y,\ s_1 \big \rangle \rightarrow s_2} 
+	{ \big \langle z:=x,\ x:=y,\ s_0 \big \rangle \rightarrow s_2  \hspace{5mm} 
+	 \big \langle y:=z,\ s_2 \big \rangle \rightarrow s_3 }}
+	{ \big \langle (z:=x;\ x:=y);\ y:=z,\ s_0 \big \rangle \rightarrow s_3} \]
+
+\begin{align*}
+&[ass_{ns}] &  
+	\big \langle x := a,\ s\big \rangle  \rightarrow s[s\mapsto \mathcal{A}[[a]]s]& \\
+&[skip_{ns}] &  
+	\big \langle skip,\ s\big \rangle  \rightarrow s& \\
+&[comp_{ns}] &  
+	\frac{ \big \langle S_1,\ s\big \rangle \rightarrow s',  \big \langle S_2,\ s'\big \rangle \rightarrow s''}
+	{ \big \langle S_1;\ S_2,\ s'\big \rangle \rightarrow s''}& \\
+&[if_{ns}^{tt}] & 
+	\frac{ \big \langle S_1,\ s\big \rangle \rightarrow s'}
+	{ \big \langle if\ \ b\ \ then\ \ S_1\ \ else\ \ S_2,\ \ s\big \rangle \rightarrow s'}\ if \mathcal{B}[[b]]s=tt& \\
+&[if_{ns}^{ff}] & 
+	\frac{ \big \langle S_2,\ s\big \rangle \rightarrow s'}
+	{ \big \langle if\ \ b\ \ then\ \ S_1\ \ else\ \ S_2,\ s\big \rangle \rightarrow s'}\ if \ \mathcal{B}[[b]]s=ff& \\
+&[while_{ns}^{tt}] & 
+	\frac{ \big \langle S,\  s\big \rangle \rightarrow s', \big \langle while\ \ b\ \ do\ \ S,\ s'\big \rangle \rightarrow s''}
+	{ \big \langle while\ \ b\ \ do\ \ S,\ \ s \big \rangle \rightarrow s''}\ if \mathcal{B}[[b]]s=tt& \\
+&[while_{ns}^{ff}] & \big \langle while\ \ b\ \ do\ \ S, s \big \rangle \rightarrow s\ \ if\ \mathcal{B}[[b]]s=ff& \\
+\end{align*}
+
+\end{boxprimer}
+
+\indent{\bf Osobine semantike} \\
+Kada imamo definisanu semantiku, to nam omogućava da rezonujemo o osobinama te semantike. Na primer, može nas interesovati da li su dve naredbe semantički ekvivalentne, odnosno da li važi da za svaka dva stanja s i s' važi sledeće:
+\[ \big \langle S_1,\ s \big \rangle \rightarrow s' akko \big \langle S_2,\ s \big \rangle \rightarrow s' \]
+Možemo da formulišemo sledeću lemu: Naredba \texttt{while b do S} je semantički ekvivalentna sa \texttt{if b then (S; while b do S) else skip}.\\
+Potrebno je dokazati u dva smera, tj.
+\[
+\big \langle while\ \ b\ \ do\ \ S,\ s \big \rangle \rightarrow s''
+\ \ akko\ \ 
+\big \langle if\ \ b\ \ then\ \ (S;\ while\ \ b\ \ do\ \ S)\ else\ \ skip,\ s \big \rangle \rightarrow s''
+\]
+
+Dokaz se izvodi konstruisanjem stabla  izvođenja na osnovu pravila izvođenja koja su data semantikom. Na primer, ako pretpostavimo da važi
+\[ \big \langle while\ \ b\ \ do\ \ S,\ s \big \rangle \rightarrow s'' \]
+onda postoji stablo izvođenja kojima se dolazi do stanja $s''$. Ukoliko pogledamo pravila izvođenja, do takvog stabla možemo doći samo primenom pravila $[while_{ns}^{tt}]$ ili pravila $[while_{ns}^{ff}]$. Potrebno je razmotriti jedan i drugi slučaj.
+\\
+(prvi slučaj): ukoliko se primenilo pravilo $[while_{ns}^{tt}]$ to se onda stablo izvođenja svodi na primenu ovog pravila:
+\[ \frac{ \big \langle S,\  s\big \rangle \rightarrow s', \big \langle while\ \ b\ \ do\ \ S,\ s'\big \rangle \rightarrow s''}
+	{ \big \langle while\ \ b\ \ do\ \ S,\ \ s \big \rangle \rightarrow s''} \]
+pri čemu važi $\mathcal{B}[[b]]s=tt$ odnosno stablo izvođenja izgleda ovako:
+\[ \frac{T_1\ \ T_2}
+	{\big \langle while\ \ b\ \ do\ \ S,\ s \big \rangle \rightarrow s''}
+\]
+pri čemu je $T_1$ nekakvo izvođenje za $\big \langle S, s \big \rangle \rightarrow s'$, a  $T_2$ nekakvo izvođenje za $\big \langle while\ \ b\ \ do\ \  S, s' \big \rangle \rightarrow s''$. Koristeći $T_1$ i $T_2$ možemo da primenimo i pravilo kompozicije $[skip_{ns}]$ i da izvedemo sledeći zaključak
+\[
+\frac{T_1\ \ T_2}
+	{\big \langle S;\ while\ \ b\ \ do\ \ S,\ s\big \rangle \rightarrow s''} 
+\]
+Pošto znamo da je $\mathcal{B}[[b]]s=tt$, možemo da primenimo $[if_{ns}^{tt}]$ i da nam stablo izvođenja sada izgleda ovako, čime smo pokazali da željeno svojstvo važi:
+\[
+\frac{\frac{T_1\ \ T_2}{\big \langle S;\ while\ \ b\ \ do\ \ S,\ s \big \rangle \rightarrow s''}}
+{\big \langle if\ \ b\ \ then\ \ (S;\ while\ \ b\ \ do\ \ S)\ else\ \ skip,\ s \big \rangle \rightarrow s''}
+\]
+
+Dalje je potrebno razmotriti $[while_{ns}^{ff}]$.
+\begin{boxprimer}
+\indent{\bf Strukturna operaciona semantika}\\
+Tranzicionu relaciju zapisujemo ovako:
+\[ \big \langle S,\ s \big \rangle \Longrightarrow \gamma \]
+ovo treba razmatrati kao {\it prvi korak} izvršavanja programa $S$ u stanju $s$ koji vodi do stanja $\gamma$: 
+\begin{enumerate}
+\item $\gamma = < S', s >$: izvršavanje programa $S$ sa ulaznim stanjem $s$ {\it nije završeno}, i ostatak izračunavanja će biti izraženo srednjom konfiguracijom $< S', s' >$.
+\item $\gamma = s'$: izračunavanje programa $S$ sa ulaznim stanjem $s$ završilo se sa završnim stanjem $s'$.
+\end{enumerate}
+\begin{align*}
+&[ass_{sos}] &&\big \langle x := a,\ s\big \rangle  \Rightarrow s[s\mapsto \mathcal{A}[[a]]s] \\
+&[skip_{sos}] &&  
+	\big \langle skip,\ s\big \rangle  \Rightarrow s \\
+&[comp_{sos}^{1}] &&\frac{ \big \langle S_1,\ s\big \rangle \Rightarrow \big \langle {S'}_1,\ s'\big \rangle}
+	{ \big \langle S_1;\ S_2,\ s\big \rangle \Rightarrow \big \langle {S'}_1;\ S_2,\ s' \big \rangle}\\
+&[comp_{sos}^{2}] && 
+	\frac{ \big \langle S_1,\ s\big \rangle \Rightarrow s'}
+	{ \big \langle S_1;\ S_2,\ s\big \rangle \Rightarrow \big \langle S_2,\ s' \big \rangle}\\
+&[if_{sos}^{tt}] &&\big \langle if\ \ b\ \ then\ \ S_1\ \ else\ \ S_2,\ s\big \rangle 
+	\Rightarrow\big \langle S_1,\ s\big \rangle \ if \ \mathcal{B}[[b]]s=tt \\
+&[if_{sos}^{ff}] &&\big \langle if\ \ b\ \ then\ \ S_1\ \ else\ \ S_2,\ s\big \rangle 
+	\Rightarrow\big \langle S_2,\ s\big \rangle \ if \ \mathcal{B}[[b]]s=ff \\
+&[while_{sos}] &&\big \langle while\ \ b\ \ do\ \ S, s \big \rangle \Rightarrow
+	\big \langle \ if\ \ b\ \ then\ (S;\ while\ \ b\ \ do\ \ S)\ else\ \ skip,\ s \big \rangle \\
+\end{align*}
+SOS omogućava praćenje ``sitnijih detalja'' izračunavanja.
+\end{boxprimer}
+
+\begin{boxprimer}
+{\bf Aksiomatska semantika - primer}\\
+\begin{align*}
+&[ass_{p}] & &\{P[x \rightarrow [\![A]\!] ]\} x:= a\ \{P\} \\
+&[skip_{p}] &  &  \{P\} skip  \{P\}  \\
+&[comp_{p}] & & \frac{\{P\}\ S_1\  \{Q\},\  \{Q\}\ S_2\  \{R\}}{ \{P\}\ S_1;\ S_2 \{R\}} \\
+&[if_{p}] & & \frac{ \{B[\![b]\!] \wedge P \}\ S_1\  \{Q\},\  \{\neg B[\![b]\!] \wedge P\}\ S_1\  \{Q\} }
+			{ \{P\}\ if\ \ b\ \ then\ \ S_1\ \ else\ \ S_2\ \  \{Q\}  }  \\
+&[while_{p}] & & \frac{ \{B[\![b]\!] \wedge P \}\ S\ \{P\} }
+			{ \{P\}\ while\ \ b\ \ do\ \ S\ \ \{\neg B[\![b]\!] \wedge P\}  } \\
+&[cons_{p}p] & & \frac{\{P'\}\ S\ \{Q'\}}{\{P\} \ S\ \{Q\}}\ if\ P\Rightarrow P'\ \ and\ \ Q \Rightarrow Q'\\
+\end{align*}
+\end{boxprimer}
+
+\pagebreak
+
+\begin{multicols}{2}
+	\begin{boxprimer}
+	{\bf Sintaksni domeni i pravila:}
+	
+	$B:Broj$  \tab B je nenegativan broj\\
+	$C:Cifra$ \tab C je cifra 0,1,\ldots,9\\
+	$I:Izraz$\\
+	$Broj::== Cifra|BrojCifra$\\
+	$Cifra::== 0|1|2|3|4|5|6|7|8|9$\\
+	$Izraz::== Broj|Izraz+Izraz$
+	\end{boxprimer}
+	\columnbreak
+	Sledeći korak jeste definisanje matematičkih objekata koji će predstavljati semantičke vrednosti. Ti matematički objekti nazivaju se {\bf semantički domeni}. Njihova kompleksnost zavisi od toga koliko je kompleksan programski jzik kojem dajemo značenje, u ovom jednostavnom primeru, semantička vrednost može biti i samo prirodan broj ($N=0,1,2,3,\ldots$). 
+\end{multicols}
+{\bf Funkcije značenja} daju značenje uvedenim sintaksnim definicijama. (videti primer)
+\\
+	Denotaciona sematika apstrahuje izvršavanje funkcionalnih programskih jezika -- funkcionalno programiranje zasniva se na pojmu matematičkih funkcija i izvršavanje programa svodi se na evaluaciju funkcija. Analiziranje programa se svodi na analiziranje matematičkih objekata, što olakšava formalno dokazivanje semantičkih svojstava programa. 
+	
+	\begin{boxprimer}[breakable]
+	{\bf Funkcije značenja:}\\
+	$povezibn : B \rightarrow N$ \tab unarna funkcija - povezuje broj sa N\\
+$povezicn : C \rightarrow N$ \tab unarna funkcija - povezuje cifru sa N\\
+$semantika : I \rightarrow N$ \tab unarna funkcija - povezuje izraz sa N\\
+$plus : N \times N \rightarrow N$ \tab binarna funkcija plus - isto što i +\\
+$pom : N \times N \rightarrow N$ \tab binarna funkcija pom - isto što i *\\
+$povezicn[\![0]\!] = 0, ..., povezicn[\![9]\!] = 9$ \\
+$povezibn[\![C]\!] = povezicn[\![C]\!]$\\
+$povezibn[\![BC]\!] = plus(pom(10, povezibn[\![B]\!]), povezibn[\![C]\!])$\\
+$semantika[\![B]\!] = povezibn[\![B]\!]$\\
+$semantika[\![I1 + I2]\!] = plus(semantika[\![I1]\!], semantika[\![I2]\!])$\\
+	
+	Zagrade [\![, ]\!] imaju ulogu da razdvoje semantički deo od sintaksnog dela. U okviru zagrada
+nalazi se sintaksni deo definicija.
+	\\
+	Pronaći značenje izraza $2+32+61$.
+	\begin{align*}
+	semantika[\![2+32+61]\!] &= plus(semantika[\![2+32]\!],semantika[\![61]\!])\\
+					&= plus(plus(semantika[\![2]\!],semantika[\![32]\!]),povezibn[\![61]\!]) \\
+					&= plus(plus(2,32),61) = plus(2+32,61)\\
+					&= plus(34+61) = 34+61 = 95
+	\end{align*}
+	jer je:
+	\begin{align*}
+	semantika[\![2]\!] &= povezibn[\![2]\!] = povezicn[\![2]\!] = 2\\
+	semantika[\![32]\!] &= povezibn[\![32]\!] \\
+				&= plus(pom(10,povezibn[\![3]\!]),povezibn[\![2]\!])\\
+				&=plus(pom(10,povezicn[\![3]\!]),povezicn[\![2]\!])\\
+				&= plus(pom(10,3),2) = plus(10*3,2) \\
+				&= plus(30,2) = 30+2 = 32 \\
+	semantika[[61]] &= povezibn[\![61]\!] \\
+				&= plus(pom(10,povezibn[\![6]\!]),povezibn[\![1]\!]) \\
+				&= plus(pom(10,povezicn[\![6]\!]),povezicn[\![1]\!])\\
+				&= plus(pom(10,6),1) = plus(10*6,1) \\
+				&= plus(6center0,1) = 60+1 = 61
+	\end{align*}
+	\end{boxprimer}
+	
+\indent{\bf Aksiomatska semantika} \\
+
+Aksiomska semantika zasniva se na matematičkoj logici, na primer na Horovoj logici.
+Horova trojka \texttt{\{P\} C \{Q\};} opisuje kako izvršavanje dela koda menja stanje izračunavanja: ako je ispunjen preduslov \texttt{\{P\}}, izvršavanje komande \texttt{C} vodi do postuslova \texttt{\{Q\}}.
+Horova logika obezbeđuje aksiome i pravila izvođenja za sve konstrukte jednostavnog imperativnog programskog jezika.
+\begin{boxprimer}[width=\linewidth/2]
+\begin{Verbatim}
+                       {P}S{Q}, {Q}T{R}
+--------------         -----------------
+  {P}skip{P}              {P}S;T{R}  
+\end{Verbatim}
+\end{boxprimer}
+
+{\bf Semantika} \hfill 
+
+	Kompajler prevodi kod na mašinski jezik u skladu sa zadatom semantikom jezika. Tokom kompilacije, vrši se proveravanje da li postoji neka semantička greška, tj. situacija koja je sintaksno ispravna, ali za kontretne vrednosti nema pridruženo značenje zadatom semantikom. Neki aspekti semantičke korektnosti programa se mogu proveriti tokom prevođenja programa -- na primer, da su sve promenljive koje se koriste u izrazima definisane i da su odgovarajućeg tipa. Neki aspekti semantičke korektnosti se mogu proveriti tek u fazi izvršavanja programa -- na primer, deljenje nulom, pristup elementima niza van granica,\ldots\\
+	Semantičke provere se mogu podeliti na statičke (provere prilikom kompilacije) i dinamičke (provere prilikom izvršavanja programa). Statički se ne može pouzdano utvrditi ispunjenost semantičkih uslova, tako da je moguće da se neke greške ne utvrde, iako prisutne, kao i da se neke greške pogrešno utvrde iako nisu prisutne i da rezultiraju nepotrebnim proverama prilikom izvršavanja programa. Različitim programskim jezicima odgovaraju izvršni programi koji sadrže različite nivoe dinamičkih provera ispravnosti. 
+
+\subsection{Imena, povezanost, doseg}
+
+\indent {\it Ime} -- string koji se koristi za predstavljanje nečega (promenljive, konstante, operatora, tipova, \ldots). \\
+Prvi programski jezici imali su imena dužine jednog karaktera (po uzoru na matematičke promenljive). Fortran I je to promenio dozvoljavajući 6 karaktera u imenu. Fortran 95 i kasnije verzije Fortrana dozvoljavaju 31 karakter u imenu, C99 nema ograničenja za interna imena, ali samo prvih 63 je značajno. Eksterna imena u C99 (ona koja su definisana van mogula i o kojima mora da brine linker) imaju ograničenje od 31 karaktera. Imena u Javi, C\# i Adi nemaju ograničenja dužine i svi karakteri su značajni. C++ ne zadaje limit dužine imena, ali implementacije obično zadaju.
+\\
+Imena u većini programskih jezika imaju istu formu -- slova, cifre i podvlaka. Podvlaka se sve češće zamenjuje kamiljom \break notacijom. U nekim jezicima moraju da počnu specijalnim znacima (npr PHP ime mora da počne sa \$). Imena su najčešće case senstive, što može da stvara probleme.
+\\
+Specijalne reši se koriste da učine program čitljivijim -- imenuju akcije koje treba da se sprovedu ili sintaksno odvajaju delovi naredbi i programa. U većini jezika specijalne reči su rezervisane reči koje ne mogu da budu predefinisane od strane programa. Ključne reči su najčešće rezervisane reči, ali ne moraju to da budu, kao na primer kontekstno zavisne ključne reči. Nije dobro ako jezik ima prevelik broj rezervisanih reči. Na primer, COBOL ima oko 300 rezervisanih reči, u koje spadaju i \texttt{count}, \texttt{length}, \texttt{bottom}, \texttt{destination}, \ldots
+\\
+\indent {\it Promenljiva} -- apstrakcija memorijskih jedinica (ćelija), ime promenljive je imenovanje memorijske lokacije.
+\\
+Karakteristike promenljivih: ime, adresa, vrednost, tip, životni vek, doseg. 
+\\
+{\it Imena} promenljivih su najčešća imena u programu, ali nemaju sve promenljive imena (tj nemaju sve memorijske lokacije imena, na primer, memorijske lokacije eksplicitno definisane na hipu kojima se pristupa preko pokazivača). 
+\\
+\indent{\it Adresa} promenljive je adresa fizičke memorije koja je pridružena promenljivoj za skladištenje podataka. Promenljiva može imati različite fizičke lokacije prilikom izvršavanja programa (npr različiti pozivi iste funkcije rezultuju različitim adresama na steku). Adresa se često naziva {\it l-vrednost}. Moguće je da postoje više promenljivih koje imaju istu adresu -- {\bf aliasi}. Aliasi pogoršavaju čitljivost programa i čine verifikaciju programa težom.
+\\ Aliasi: unije u C/C++-u, dva pointera koji pokazuju na istu memorijsku lokaciju, dve reference, pointer i promenljiva,\ldots Aliasi se u mnogim jezicima kreiraju kroz parametre poziva potprograma.
+\\
+\indent{\it Tip} promenljive određuje opseg vrednosti koje promenljiva može da ima kao i operacije koje se mogu izvršiti za vrednosti tog tipa. Osnovni tipovi, niske, korisnički definisani prebrojivi tipovi (enum, su-
+brange), nizovi, asocijativni nizovi, strukture, torke, liste, unije, pokazivači i reference.
+\\
+\indent{\it Vrednost} promenljive je sadržaj odgovarajuće memorijske ćelije, često se naziva {\it r-vrednost}. Da bi se pristupilo r-vrednosti mora najpre da se odredi l-vrednost, što ne mora da bude jednostavno, jer zavisi od pravila dosega.
+\\
+\indent{\it Povezivanje} uspostavlja odnos izmedu imena sa onim što to ime predstavlja. Vreme povezivanja je vreme kada se ova veza uspostavlja. Rano vreme povezivanja -- veća efikasnost, kasno vreme povezivanja -- veća fleksibilnost. Vreme povezivanja može biti (vreme - primer):
+\begin{itemize}
+\item vreme dizajna programskog jezika (osnovni konstrukti, primitivni tipovi podataka\ldots)
+\item vreme implementacije (veličina osnovnih tipova podataka\ldots)
+\item vreme programiranja (algoritmi, strukture, imena promenljivih)
+\item vreme kompiliranja (preslikavanje konstrukata višeg nivoa u mašinski kod)
+\item vreme povezivanja (kada se ime iz jednog modula odnosi na objekat definisan u drugom modulu)
+\item vreme učitavanja (kod starijih operativnih sistema, povezivanje objekata sa fizičkim adresama u memoriji)
+\item vreme izvršavanja (povezivanje promenljivih i njihovih vrednosti)
+\end{itemize}
+
+\indent{\it Doseg} određuje deo programa u kojem je vidljivo neko ime. Pravila dosega mogu da budu veoma jednsotavna (kao u skript jezicima) ili veoma kompleksna. Doseg ne određuje nužno životni vek objekta. 
+\\
+\indent{\it Životni vek} obično odgovara jednom od tri osnovna mehanizma skladištenja podataka. Razlikuju se:
+\begin{description}
+\item[Statički objekti] koji imaju životni vek koji se prostire tokom celog rada programa (npr globalne promenljive)
+\item[Objekti na steku] živoni vek koji se alocira i dealocira LIFO principom, obično zajedno sa pozivom i završetkom rada podprograma.
+\item[Objekti na hipu] Objekti na hipu — koji se aociraju i dealociraju proizvoljno od strane programera, implicitno ili eksplicitno, i koji zahtevaju opštiji i skuplji sistem za upravljanje skladištenjem (memorijom)
+\end{description}
+
+\subsection{Kontrola toka i tipovi}
+Kontrola toka definiše redosled izračunavanja koje računar sprovodi da bi se ostvario neki cilj. Postoje različiti mehanizmi odredivanja kontrole toka: 
+\begin{enumerate}
+\item {\bf Sekvenca} -- određen redosled izvršavanja
+\item {\bf Selekcija} -- u zavisnosti od uslova, pravi se izbor (if, switch)
+\item {\bf Iteracija} -- fragment koda se izvršava više puta
+\item {\bf Podrutine} -- apstrakcija kontrole toka: one dozvoljavaju da programer sakrije proizvoljno komplikovan kod iza jednostavnog interfejsa (procedure, funkcije, rutine, metodi, potprogrami)
+\item {\bf Rekurzija} -- definisanje izraza u terminima samog izraza (direktno
+ili indirektno)
+\item {\bf Konkurentnost} -- dva ili više fragmenta programa mogu da se izvršavaju u istom vremenskom intervalu, bilo paralelno na različitim procesorima, bilo isprepletano na istom procesoru
+\item {\bf Podrška za rad sa izuzecima} -- fragment koda se izvršava očekujući da su neki uslovi ispunjeni, ukoliko se desi suportno, izvršavanje se nastavlja u okviru drugog fragmenta za obradu izuzetka
+\item {\bf Nedeterminizam} -- redosled izvršavanja se namerno ostavlja nedefinisan, što povlači da izvršavanje proizvoljnim redosledom dovodi do korektnog rezultata
+\end{enumerate}
+
+\indent Programski jezici moraju da organizuju podatke na neki način. Tipovi pomažu u dizajniranju programa, proveri ispravnosti programa i u utvrđivanju potrebne memorije za skladištenje podataka. Mehanizmi potrebni za upravljanjem podacima nazivaju se {\bf sistem tipova}. Sistem tipova obično uključuje:
+\begin{itemize}
+\item skup predefinisanih osnovnih tipova (npr int, string\ldots)
+\item mehanizam građenja novih tipova (npr struct, union)
+\item mehanizam kontrolisanja tipova
+	\begin{itemize}
+	\item pravila za utvrđivanje ekvivalentnosti: kada su dva tipa ista?
+	\item pravila za utvrđivanje kompatibilnosti: kada se jedan tip može zameniti drugim?
+	\item pravila izvođenja: kako se dodeljuje tip kompleksnim izrazima?
+	\end{itemize}
+\item pravila za proveru tipova (statička i dinamička provera)
+\end{itemize}
+
+Jezik je tipiziran ako precizira za svaku operaciju nad kojim tipovima podataka može da se izvrši. Jezici kao što je asembler i mašinski jezici nisu tipizirani jer se svaka operacija izvršava nad bitovima fiksne širine. Postoji slabo i jako tipiziranje. Kod jako tipiziranih jezika izvođenje operacije nad podacima pogrešnog tipa će izazvati grešku. Slabo tipizirani jezici izvršavaju implicitne konverzije ukoliko nema poklapanja tipova. Neki jezici dozvoljavaju eksplicitno kastovanje tipova.
+\\
+Važan je trenutak kada se radi provera tipova:
+\begin{itemize}
+\item Za vreme prevođenja programa -- statičko tipiziranje
+\item Za vreme izvršavanja programa -- dinamičko tipiziranje
+\end{itemize} 
+Statičko tipiziranje je manje sklono greškama ali može da bude previše restriktivno, dok je dinamičko tipiziranje sklonije greškama i teško za debagovanje ali fleksibilnije.
+
+\subsection{Prevođenje i izvršavanje}
+{\bf Kompilirani jezici} se prevode u mašinski kod koji se izvršava direktno na procesoru računara -- faze prevodenja i izvršavanja programa su razdvojene. U toku prevođenja, vrše se razne optimizacije izvršnog koda što ga čini efikasnijim. Jednom preveden kod se može puno puta izvršavati, ali svaka izmena izvornog koda zahteva novo prevođenje.
+\\
+žindent {\bf Interpretirani jezici} se prevode naredbu po naredbu i neposredno zatim se naredba izvršava -- faze prevođenja i izvršavanja nisu razdvojene već su međusobno isprepletene. Rezultat prevođenja se ne smešta u izvršnu datoteku, već je za svako naredno pokretanje potrebna ponovna analiza i prevođenje. Sporiji je, ali prilikom malih izmena koda nije potrebno vršiti analizu celokupnog koda.
+\\
+Postoje i {\bf hibridni jezici} koji su kombinacija prethodna dva.
+\\
+Teorijski, svi programski jezici mogu da budu i kompilirani i interpretirani. Moderni programski jezici najčešće pružaju obe mogućnosti, ali u praksi je za neke jezike prirodnije koristiti odgovarajući pristup. Nekada se u fazi razvoja i testiranja koristi interpretirani pristup, a potom se generiše izvršni kod kompilacijom. Prema tome, razlika se zasniva pre na praktičnoj upotrebi nego na samim karakteristikama jezika.
+\\
+\indent Svaka netrivijalna implementacija jezika višeg nivoa intenzivno koristi rantajm biblioteke. Rantajm sistem se odnosi na skup biblioteka od kojih implementacija jezika zavisi kako bi program mogao ispravno da se izvršava. Neke bibliotečke funkcije rade jednostavne stvari (npr podrška aritmetičkim funkcijama koje nisu implementirane u okviru hardvera, kopiranje sadržaja memorije\ldots) dok neke rade komplikovanije stvari (npr upravljanje hipom, rad sa baferovanim I/O, rad sa grafičkim I/O\ldots).
+\\
+Neki jezici imaju veoma male rantajm sisteme (npr C), dok ih drugi intenzivno koriste. Virtuelne mašine u potpunosti skrivaju hardver arhitekture nad kojom se program izvršava. C\# koristi rantajm sistem CLI, JAVA koristi JVM.
+
+
+\end{document}

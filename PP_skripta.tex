@@ -1,0 +1,153 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage[english,serbian]{babel}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ inner=1.27cm,
+ outer=1.27cm,
+ tmargin=1.5cm,
+ bmargin=1.5cm,
+bindingoffset=1cm
+ }
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,calc,intersections} 
+\usetikzlibrary{decorations.markings, decorations.pathreplacing}
+\tikzset{
+    pil/.style={
+           -,
+           thick,
+           shorten <=2pt,
+           shorten >=2pt,}
+}
+\usepackage{fourier} 
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{wrapfig}
+\usepackage{caption}
+
+\renewcommand\cellgape{\Gape[4pt]} % potebno za koriscenje \makecell{...\\...} za viselinijski tekst u tabelama
+
+\definecolor{seagreen}{RGB}{0,204,153}
+\definecolor{redorange}{RGB}{235,80,48}
+\definecolor{thistle}{RGB}{216,131,183}
+\usepackage{pifont} % \cmart i \xmark znakovi
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\usepackage{arydshln} % \hdashline za tabele
+
+					% http://latexcolor.com/
+\definecolor{almond}{rgb}{0.94, 0.87, 0.8}			% moje boje :D
+\definecolor{aliceblue}{rgb}{0.94, 0.97, 1.0}
+\definecolor{antiquewhite}{rgb}{0.98, 0.92, 0.84}
+\definecolor{ashgrey}{rgb}{0.7, 0.75, 0.71}
+\definecolor{beige}{rgb}{0.96, 0.96, 0.86}
+\definecolor{cosmiclatte}{rgb}{1.0, 0.97, 0.91}
+\definecolor{ivory}{rgb}{1.0, 1.0, 0.94}
+\definecolor{etonblue}{rgb}{0.59, 0.78, 0.64}
+\definecolor{teagreen}{rgb}{0.82, 0.94, 0.75}
+\definecolor{flashwhite}{rgb}{0.95, 0.95, 0.96} %anti-flashwhite
+\definecolor{crimsonglory}{rgb}{0.75, 0.0, 0.2}
+% Za pisanje inline teksta koji je verbatim koristiti \texttt{...}
+
+% Rucno napisan \tab posto ne postoji u latexu
+\newcommand{\tab}[1][1cm]{\hspace*{#1}}
+
+% Prilikom koriscenja \hfill u description listama (moguce i na nekim drugim mestima) potrebno je "lupiti enter" jos jednom ovde u tekstu :)
+
+\usepackage{tabularx}	%za tabelu koja je sirine stranice
+\usepackage{pbox}
+\usepackage{multirow}
+\usepackage{multicol}	%\begin{multicols}{3} pravi 3 kolone, \columnbreak
+					% multicols* za nejednak sadrzaj po kolonama
+\usepackage{vwcol}	% za kolone koje imaju razlicitu sirinu
+%primer : \begin{vwcol}[widths={0.6,0.4}, sep=.8cm] ...
+\setlength{\columnsep}{3mm}
+
+%\begin{tabularx}{\textwidth}{X|l}
+% \textbf{Symptom} & \textbf{Metric} \\
+%\end{tabularx}
+
+\usepackage{mathrsfs}
+\usepackage{amssymb}	 % za \twoheadrightarrow
+\usepackage{amsmath}	% Za align* pri pisanju jednacina i ostalo
+
+\usepackage{hyperref}	% Za linkove
+\hypersetup{
+    colorlinks=true,
+    linkbordercolor = {white},
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=crimsonglory,
+}
+\usepackage{fancyvrb}	% Za frame box oko verbatima		[frame=single, samepage=true]
+				% NAPOMENA: U okruzenju verbatim tabovi nemaju efekta, dok u Verbatim imaju
+				%		    U Verbatim se pocetak linije u kodu racuna za prvu poziciju teksta
+\usepackage{tcolorbox}	% Za lepi frame 	box
+\tcbuselibrary{breakable} 	% da tcolorbox-ovi mogu da se prelamaju preko vise kolona i strana
+
+\newtheorem{theorem}{Teorema}[section]
+\newcounter{example}[section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par
+   \textbf{Primer~\theexample. #1} \rmfamily}
+   
+\newtcolorbox{boxprimer}[1][] % Dodato da moze da primi opcioni argument :D
+{
+  colframe = ashgrey,
+  colback  = ivory,
+  #1,	%breakable
+}
+\newtcolorbox{boxnaslovi}
+{
+  colframe = etonblue,
+  colback  = ivory
+}
+
+\usepackage{subfiles}
+% Ubacivanje teksta iz podfajlova sa \subfile{folder/naziv_fajla}
+
+\title{Programske paradigme}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle											% NASLOV
+\tableofcontents   			% SADRZAJ    potrebno 2 puta prevesti!!!!!!! :D
+
+\pagebreak
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+
+
+\subfile{sections/01_uvod}
+
+\subfile{sections/02_skript_ogranicenja}
+
+\subfile{sections/03_funkcionalno}
+
+\subfile{sections/04_konkurentno}
+
+\pagebreak
+\subfile{sections/05_logicko}
+
+\subfile{sections/06_imperativno}
+
+\subfile{sections/07_OOprog}
+
+\subfile{sections/08_osnovna_svojstva}
+
+\subfile{pitanja}
+
+\subfile{literatura}
+
+\end{document}
